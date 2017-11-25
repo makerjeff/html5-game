@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>bind play</title>
+</head>
+<body>
+
+<button id="button1">click 1</button>
+<button id="button2">click 2</button>
+<button id="button3">click 3</button>
+
+<script>
+    var button1 = document.getElementById('button1');
+    var button2 = document.getElementById('button2');
+    var button3 = document.getElementById('button3');
+
+    var module1 = {
+        name: 'module1-name',
+        identify: function() {
+            console.log('My name is: ' + this.name);
+        }
+    };
+
+    var module2 = {
+        name: 'module2-name'
+    };
+
+    // --- events ---
+    button1.addEventListener('click', handleClick, false );
+    button2.addEventListener('click', handleClick, false );
+    button3.addEventListener('click', handleClick2.bind(module1), false);
+
+    // --- functions ---
+    function handleClick() {
+        console.log(this);
+    }
+
+    function handleClick2() {
+        this.identify();
+    }
+
+
+</script>
+
+</body>
+</html>

@@ -9,6 +9,7 @@
   "author": "jefferson wu <makerjeffwu@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "chalk": "^2.3.0",
     "clear": "0.0.1",
     "express": "^4.16.2"
