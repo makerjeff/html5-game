@@ -14,13 +14,21 @@ class NumberedBox extends createjs.Container {
         movieclip.setBounds(0,0,50,50);
 
         // --- event handlers ---
-        this.on('click', this.handleClick.bind(this));  // refers to the Game class event handler(?)
+        this.on('click', this.handleClick.bind(this));  // binds 'NumberedBox' as 'this'; effectively defers click handling to the Game class.
     }
 
     // --- event handler functions ---
     handleClick() {
-        this.game.handleClick(this);
+        this.game.handleClick(this);    // 'this' bound to 'NumberedBox';
     }
+
+    /** Click Handler Delegation Scheme:
+     * NumberedBox click handler function refers to the Game class's click handler.
+     * NumberedBox click handler function is bound to itself using .bind(this) in the NumberedBox class.
+     * Game class click handler takes this bound scope, and uses it to remove the NumberedBox it refers to.
+     *
+     */
+
 }
 
 // game class
@@ -34,6 +42,8 @@ class Game {
         // reference stage dimensions to canvas dimensions.
         this.stage.width = this.canvas.width;
         this.stage.height = this.canvas.height;
+
+        // enable touch
 
         // createjs.Ticker.setFPS(60); //old
         createjs.Ticker.framerate = 60;
