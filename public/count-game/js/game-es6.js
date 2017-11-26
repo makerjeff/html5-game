@@ -28,7 +28,30 @@ class NumberedBox extends createjs.Container {
      * Game class click handler takes this bound scope, and uses it to remove the NumberedBox it refers to.
      *
      */
+}
 
+class GameData {
+    constructor() {
+        this.amountOfBox = 20;
+        this.resetData();
+    }
+
+    resetData() {
+        this.currentNumber = 1;
+    }
+
+    nextNumber() {
+        this.currentNumber += 1;
+    }
+
+    isRightNumber(number) {
+        return (number === this.currentNumber);
+    }
+
+    isGameWin() {
+        //TODO
+        return false;
+    }
 }
 
 // game class
@@ -43,7 +66,11 @@ class Game {
         this.stage.width = this.canvas.width;
         this.stage.height = this.canvas.height;
 
+        // retinalize
+        this.retinalize();
+
         // enable touch
+        createjs.Touch.enable(this.stage);
 
         // createjs.Ticker.setFPS(60); //old
         createjs.Ticker.framerate = 60;
@@ -91,6 +118,25 @@ class Game {
     // handle click
     handleClick(numberedBox) {
         this.stage.removeChild(numberedBox);
+    }
+
+    // make Retina Ready
+    retinalize() {
+        this.stage.width = this.canvas.width;
+        this.stage.height = this.canvas.height;
+
+        let ratio = window.devicePixelRatio;
+        if (ratio === undefined) {
+            return;
+        }
+
+        this.canvas.setAttribute('width', Math.round(this.stage.width * ratio));
+        this.canvas.setAttribute('height', Math.round(this.stage.height * ratio));
+
+        this.stage.scaleX = this.stage.scaleY = ratio;
+
+        this.canvas.style.width = this.stage.width + 'px';
+        this.canvas.style.height = this.stage.height + 'px';
     }
 }
 

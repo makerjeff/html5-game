@@ -8,6 +8,10 @@ Required setup for CreateJS:
     - createjs.Ticker.on('tick', this.stage);
     - window.debugStage = this.stage; (reference to the stage element for debugging.)
     - enable touch support
+    - make retina ready
+    
+- Game Data Class:
+    - something
 - NumberedBox Class:
     - must explicitely setBounds(x,y,width,height) for each movieclip, otherwise getBounds() will not work.
 - General:
