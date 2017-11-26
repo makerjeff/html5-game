@@ -11,7 +11,7 @@ Required setup for CreateJS:
     - make retina ready
     
 - Game Data Class:
-    - something
+    - Use this class in Game.
 - NumberedBox Class:
     - must explicitely setBounds(x,y,width,height) for each movieclip, otherwise getBounds() will not work.
 - General:

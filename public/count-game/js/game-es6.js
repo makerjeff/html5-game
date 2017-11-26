@@ -4,7 +4,8 @@ class NumberedBox extends createjs.Container {
     constructor(game, number=0) {
         super();    // required to initialize the parent's constructor.
 
-        this.game = game;   // used to specify NumberedBox's game instance.
+        this.game = game;       // used to specify NumberedBox's game instance.
+        this.number = number;   // used to store current number value to be accessed later by GameData.
 
         let movieclip = new lib.NumberedBox();  // linkage name from Adobe Animate CC.
         movieclip.numberText.text = number;     // property inside
@@ -30,6 +31,7 @@ class NumberedBox extends createjs.Container {
      */
 }
 
+// GAME DATA class : Handles game data logic.
 class GameData {
     constructor() {
         this.amountOfBox = 20;
@@ -49,14 +51,14 @@ class GameData {
     }
 
     isGameWin() {
-        //TODO
-        return false;
+
     }
 }
 
-// game class
+// MAIN GAME CLASS
 class Game {
     constructor() {
+        // ----- SETUP -----
         console.log(`Welcome to the game! Version ${this.version()}`);
 
         this.canvas = document.getElementById('game-canvas');
@@ -65,6 +67,9 @@ class Game {
         // reference stage dimensions to canvas dimensions.
         this.stage.width = this.canvas.width;
         this.stage.height = this.canvas.height;
+
+        // instance of GameData class
+        this.gameData = new GameData();
 
         // retinalize
         this.retinalize();
@@ -88,13 +93,14 @@ class Game {
         this.stage.addChild(background);
 
         // create a NumberedBox manually
-        this.stage.addChild(new NumberedBox(this, 88));
+        window.box88 = new NumberedBox(this, 88);
+        // this.stage.addChild(new NumberedBox(this, 88));
+        this.stage.addChild(window.box88);
 
         // generate 20 random boxes.
         this.generateMultipleBoxes(20);
-
-
     }
+
     version() {
         return '0.0.2';
     }
@@ -117,7 +123,12 @@ class Game {
 
     // handle click
     handleClick(numberedBox) {
-        this.stage.removeChild(numberedBox);
+
+        if (this.gameData.isRightNumber(numberedBox.number)) {
+            console.log(numberedBox.number);
+            this.stage.removeChild(numberedBox);
+            this.gameData.nextNumber();
+        }
     }
 
     // make Retina Ready
