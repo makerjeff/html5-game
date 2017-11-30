@@ -14,6 +14,9 @@ class NumberedBox extends createjs.Container {
         // manually set bounds, so it can be retrieved with getBounds()
         movieclip.setBounds(0,0,50,50);
 
+        // create a buttonhelper
+        new createjs.ButtonHelper(movieclip, 0, 1, 2, false, new lib.NumberedBox(), 3);
+
         // --- event handlers ---
         this.on('click', this.handleClick.bind(this));  // binds 'NumberedBox' as 'this'; effectively defers click handling to the Game class.
     }
@@ -51,7 +54,7 @@ class GameData {
     }
 
     isGameWin() {
-
+        return (this.currentNumber > this.amountOfBox); // returns true if game winning logic checks.
     }
 }
 
@@ -63,6 +66,9 @@ class Game {
 
         this.canvas = document.getElementById('game-canvas');
         this.stage = new createjs.Stage(this.canvas);
+
+        // enable mouseOver
+        this.stage.enableMouseOver();
 
         // reference stage dimensions to canvas dimensions.
         this.stage.width = this.canvas.width;
@@ -88,21 +94,32 @@ class Game {
 
         // --- START CREATING STAGE ELEMENTS ---
 
-        // create background
-        let background = new lib.Background();
-        this.stage.addChild(background);
 
-        // create a NumberedBox manually
-        window.box88 = new NumberedBox(this, 88);
-        // this.stage.addChild(new NumberedBox(this, 88));
-        this.stage.addChild(window.box88);
+        // TODO: debug-only, remove me.
+        // // create a NumberedBox manually
+        // window.box88 = new NumberedBox(this, 88);
+        // // this.stage.addChild(new NumberedBox(this, 88));
+        // this.stage.addChild(window.box88);
 
-        // generate 20 random boxes.
-        this.generateMultipleBoxes(20);
+        this.restartGame();
+
+
     }
 
     version() {
         return '0.0.2';
+    }
+
+    restartGame() {
+        this.gameData.resetData();
+        this.stage.removeAllChildren();
+
+        // create background
+        let background = new lib.Background();  // moved out from constructor
+        this.stage.addChild(background);        // moved out from constructor
+
+        // generate 20 random boxes.
+        this.generateMultipleBoxes(this.gameData.amountOfBox);
     }
 
     // distribute boxes.
@@ -129,6 +146,18 @@ class Game {
             this.stage.removeChild(numberedBox);
             this.gameData.nextNumber();
         }
+
+        // check game over logic.
+        if(this.gameData.isGameWin()) {
+            let gameOverView = new lib.GameOverView();
+            this.stage.addChild(gameOverView);
+
+            //listen for restartButton click
+            gameOverView.restartBootan.on('click', (function() {
+                this.restartGame();
+            }).bind(this));     // must bind to 'this', so it refers to 'game' class.
+        }
+
     }
 
     // make Retina Ready
