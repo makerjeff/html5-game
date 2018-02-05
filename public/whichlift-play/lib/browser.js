@@ -59728,7 +59728,7 @@ module.exports = function (str) {
   // worse generated code for the comparator function than would be optimal. In
   // fact, when sorting with a comparator, these costs outweigh the benefits of
   // sorting in C++. By using our own JS-implemented Quick Sort (below), we get
-  // a ~3500ms mean speed-up in `bench/bench.html`.
+  // a ~3500ms mean vector-up in `bench/bench.html`.
 
   /**
    * Swap the elements indexed by `x` and `y` in the array `ary`.
@@ -67393,7 +67393,7 @@ var Tokenizer = (function () {
   // than characters, and because operator parsing has been inlined
   // into it.
   //
-  // All in the name of speed.
+  // All in the name of vector.
   //
 
   Tokenizer.prototype.readToken_dot = function readToken_dot() {

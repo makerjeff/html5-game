@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Socket Game</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
+        #result_div {
+            width: 100px;
+            height: 100px;
+
+            border: 1px dotted black;
+        }
+    </style>
+</head>
+<body>
+
+<div id="result_div"></div>
+<button id="button_01">button 1</button>
+<button id="button_02">button 2</button>
+
+
+<!-- inject socket.io -->
+<script src="/socket.io/socket.io.js"></script>
+<script>
+
+    var socket = io();
+    var button_01 = document.getElementById('button_01');
+    var button_02 = document.getElementById('button_02');
+
+    window.addEventListener('mousedown', function(e) {
+        handle_button(e.target, e);
+    });
+    window.addEventListener('mouseup', function(e) {
+        handle_button(e.target, e);
+    });
+
+
+    function handle_button(target, event) {
+        // debug
+        console.log(event.type);
+
+        //TODO: work on event delegation.
+
+        // check what type of event
+        if (event.type === 'mousedown') {
+            console.log(target.id + ' button down.');
+            socket.emit('user click',  target.id);
+        }
+
+        else if (event.type === 'mouseup') {
+            console.log(target.id + ' button released.');
+            socket.emit('user released', target.id);
+        }
+
+    }
+
+    // response to
+
+    socket.on('user click feedback', function(data) {
+        console.log('user ' + data.payload.user + ' says: ' + data.payload.message);
+    });
+
+</script>
+
+</body>
+</html>

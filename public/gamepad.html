@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>gamepad</title>
+</head>
+<body>
+
+<canvas id="game_canvas" width="640" height="480"></canvas>
+
+<div id="gamepad_info"></div>
+
+<script>
+
+    var gamepad_info_div = document.getElementById('gamepad_info');
+    var canvas = document.getElementById('game_canvas');
+    var ctx = canvas.getContext('2d');
+
+    window.addEventListener('load', function(e) {
+        console.log('fully loaded.');
+
+        requestAnimationFrame(draw);
+
+
+    });
+
+    window.addEventListener('gamepadconnected', connectHandler);
+    window.addEventListener('gampaddisconnected', disconnectHandler);
+
+    function draw() {
+        // background
+        ctx.fillStyle = 'rgb(200,0,0)';
+        ctx.fillRect(0,0, canvas.width, canvas.height);
+
+        // text
+        ctx.fillStyle = 'rgb(0,0,0)';
+        ctx.font = "48px san-serif";
+        ctx.fillText('Hello World ' + Date.now(), 10, 50);
+
+//        console.log('frame updated: ' + Date.now());
+        requestAnimationFrame(draw);
+    }
+
+    function connectHandler(e) {
+        var gp = navigator.getGamepads()[e.gamepad.index];
+        gamepad_info_div.innerHTML = 'Gamepad connected';
+    }
+    function disconnectHandler(e) {
+        gamepad_info_div.innerHTML = 'Waiting for gamepad.';
+    }
+
+    function query_buttons() {
+        var game
+    }
+
+
+
+
+</script>
+
+</body>
+</html>

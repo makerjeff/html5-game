@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Socket.IO Chat</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Helvectica, Arial, sans-serif;
+        }
+
+        form {
+            background: #000;
+            padding: 3px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        form input {
+            border: 0;
+            padding: 10px;
+            width: 90%;
+            margin-right: 0.5%;
+        }
+
+        form button {
+            width: 9%;
+            background: rgb(130, 224, 255);
+            border: none;
+            padding: 10px;
+        }
+
+        #messages {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        #messages li {
+            padding: 5px 10px;
+        }
+
+        #messages li:nth-child(odd) {
+            background: #eee;
+        }
+    </style>
+</head>
+<body>
+    <ul id="messages"></ul>
+    <form action="">
+        <input id="m" autocomplete="off" /> <button>Send</button>
+    </form>
+
+    <!-- socket.io REQUIRED-->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <!-- custom script -->
+    <script>
+        var socket = io();
+
+        var form = document.getElementsByTagName('form')[0];
+        var form_input = document.getElementById('m');
+        var message_div = document.getElementById('messages');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            console.log('submit blocked.');
+
+            socket.emit('chat message', form_input.value);
+
+            form_input.value = '';
+
+        });
+
+        socket.on('chat message', function(data) {
+
+            var user = data.user;
+            var msg = data.msg;
+
+            var li = document.createElement('li');
+            li.innerHTML = '<p>' + user + ': ' + msg + '</p>';
+
+            message_div.appendChild(li);
+
+        });
+
+        socket.on('user id', function(data) {
+            document.title = data;
+            console.log(data);
+        });
+
+
+    </script>
+
+</body>
+</html>

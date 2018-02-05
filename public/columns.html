@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>multi-columns</title>
+
+    <style>
+
+        * {
+            padding: 0;
+            margin: 0;
+
+            font-family: sans-serif;
+            box-sizing: border-box;
+        }
+
+        p {
+            /*column-count: 2;*/
+            line-height: 1.4em;
+            padding-bottom: 1.4em;
+
+            padding-left: 1.2em;
+            padding-right: 1.2em;
+        }
+
+        .container {
+
+            display: flex;
+            /*justify-content: center;*/
+            align-items: center;
+            flex-direction: column;
+
+            width: 100%;
+        }
+
+        .masthead_container {
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            flex-direction: column;
+
+            color: white;
+
+            text-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+
+            width: 100vw;
+            height: 100vh;
+            min-height: 640px;
+
+            background: url('http://thecatapi.com/api/images/get.php?api_key=MTAx&id=55a');
+            background-size: cover;
+
+            background-position: 25% 20%;
+        }
+
+        .masthead_container > h1 {
+            font-size: 3em;
+        }
+
+        .masthead_container > p {
+            font-size: 1.5em;
+        }
+
+        .text_container {
+            /*max-width: 500px;*/
+
+            background: rgba(255,0,0,0.25);
+            column-count: 2;
+            column-fill: auto;
+
+            padding: 25px;
+
+            max-width: 720px;
+        }
+
+        .button_container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+
+            padding: 25px;
+
+            max-width: 720px;
+
+            width: 100%;
+
+            background: rgba(0,255,0,0.25);
+
+        }
+
+        .fake_button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            flex-direction: row;
+
+            padding: 15px;
+
+            background: rgba(0,0,0,0);
+            border: 5px solid black;
+
+            height: auto;
+            width: 150px;
+
+            border-top-left-radius: 0;
+            border-top-right-radius: 15px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 15px;
+
+            cursor: pointer;
+
+            transition: all 250ms ease;
+        }
+
+        .fake_button:hover {
+            border-top-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+
+
+        footer {
+            width: 100%;
+            height: 250px;
+            background: black;
+        }
+
+
+        /* mobile state -- styles the screen, 'and' max-width */
+        @media only screen and (max-width: 568px) {
+        /* mobile overrides here */
+
+            .text_container {
+                column-count: 1;
+            }
+
+            .button_container {
+                flex-direction: column;
+            }
+
+            .fake_button {
+                width: calc(100%);
+                margin: 15px;
+            }
+        }
+
+
+
+    </style>
+</head>
+<body>
+
+<main id="main_container" class="container">
+    <div id="masthead" class="masthead_container">
+        <h1>WONDERFUL SITE TITLE</h1>
+        <p>Subheader here and there, sprinkled everywhere.</p>
+    </div>
+
+    <div id="text_container" class="text_container">
+        <p>Bacon ipsum dolor amet beef venison turkey tenderloin chuck bacon flank pig, meatloaf porchetta frankfurter. Pork chop alcatra tail biltong sirloin, cow frankfurter. Boudin ribeye pork shankle bacon sirloin t-bone. Flank tongue salami tri-tip. Boudin buffalo tongue, pig t-bone biltong short loin bresaola frankfurter picanha shankle ham. Salami landjaeger t-bone venison pancetta, pork loin kevin drumstick beef tenderloin cupim. Meatball cow doner, biltong venison shoulder pork loin ball tip short ribs frankfurter brisket cupim jowl capicola.</p>
+        <p>Sirloin pancetta porchetta cupim tail frankfurter. Jowl shoulder ham, pork belly buffalo drumstick kielbasa corned beef pork loin fatback spare ribs salami short ribs hamburger venison. Capicola corned beef strip steak biltong, brisket ham hock venison. Shankle kevin doner, brisket leberkas beef ribs tongue boudin capicola meatloaf pork loin prosciutto frankfurter. Tri-tip shoulder filet mignon tongue.</p>
+        <p>Turducken venison ham hock, beef frankfurter fatback corned beef pork ground round buffalo. Turkey tri-tip fatback rump sirloin, ball tip chuck pastrami cow. Ribeye filet mignon kielbasa, turkey bresaola picanha pig tongue shank meatball venison cow capicola t-bone. Pastrami sirloin capicola swine pork porchetta salami. Andouille filet mignon beef ribs frankfurter corned beef biltong.</p>
+    </div>
+
+    <div id="button_container" class="button_container">
+        <div id="button_01" class="fake_button"> click me </div>
+        <div id="button_02" class="fake_button"> click me </div>
+        <div id="button_03" class="fake_button"> click me </div>
+    </div>
+
+</main>
+
+<footer></footer>
+
+
+
+</body>
+</html>

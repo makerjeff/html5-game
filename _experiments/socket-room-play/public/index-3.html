@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SRP-3</title>
+
+    <style>
+
+        .result_div {
+            background: black;
+            color: white;
+            font-family: "Courier New", serif;
+
+            padding: 0;
+            margin: 0;
+
+            box-sizing: border-box;
+
+            position: absolute;
+            bottom: 0;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <form id="submit_form" name="submit_form">
+        <label for="input_room">ROOM CODE</label> <br>
+        <input id="input_room" type="text" name="input_room" autocomplete="off">
+
+        <br>
+        <label for="input_name">NICK NAME</label> <br>
+        <input id="input_name" type="text" name="input_name" autocomplete="off">
+        <button id="submit-button" type="submit">join room</button>
+    </form>
+
+    <button id="debug-button">debug</button>
+    <div id="result_div" class="result_div"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./lib/quickAjax.js"></script>
+    <script src="./lib/debugLog.js"></script>
+
+    <script>
+
+        // quick sockets
+        var socket = io.connect();
+        var room = 'abc123';
+
+        // socket connections
+        socket.on('connect', function() {
+            socket.emit('room', room);
+        });
+        socket.on('message', function(data) {
+            console.log('Incoming message from server: ', data);
+        });
+
+        // basic variables
+        var form = document.getElementById('submit_form');
+        var result_div = document.getElementById('result_div');
+        var debug_button = document.getElementById('debug-button');
+
+
+        // event listeners
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+    //        var target = this.elements[0];
+    //        debug.log(target.value);
+    //        target.value = '';
+
+            // TODO: iterate through items in elements.
+            for (item in this.elements) {
+                debug.log(item);
+                item.value = '';
+            }
+
+    //        this.elements.forEach(function(elem,ind,arr) {
+    //            debug.log(elem.value);
+    //            elem.value = '';
+    //        });
+        });
+
+
+        debug_button.addEventListener('click', function(e) {
+            quickJax.get('/clients', function(data) {
+                var msg = 'data count ' + data.ids.length + ': ' + JSON.stringify(data.objects);
+                debug.log(msg, result_div);
+            });
+        });
+
+
+
+
+    </script>
+
+</body>
+</html>

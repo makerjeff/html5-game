@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>socket room play</title>
+</head>
+<body>
+
+<canvas id="game-canvas" width=300 height=400>
+    Canvas element. If you can read this, your browser doesn't support it.
+</canvas>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+
+    // quick sockets
+    var socket = io.connect();
+    var room = 'abc123';
+
+    socket.on('connect', function() {
+        socket.emit('room', room);
+    });
+
+    socket.on('message', function(data) {
+        console.log('Incoming message from server: ', data);
+    });
+
+    var canvas = document.getElementById('game-canvas');
+    var ctx = canvas.getContext('2d');
+
+    var char = {
+        pos: {x: 0, y: 0},
+        size: {x: 50, y: 50},
+        vector: {x: 2, y: 3}
+    };
+
+    // no delay blink global vars
+    var prev_millis = Date.now();
+    var curr_millis;
+
+
+
+
+    window.addEventListener('load', function(e) {
+        requestAnimationFrame(draw);
+    });
+
+
+    function draw() {
+
+
+        // TODO: track the objects that need to be rendered with an array.
+
+        // ----- DRAW -----
+        ctx.fillStyle = 'rgb(255,0,0)';
+        ctx.save();
+
+        ctx.fillStyle = 'rgb(0,0,0)';
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+
+        ctx.restore();
+        ctx.fillRect( char.pos.x, char.pos.y, char.size.x, char.size.y);
+
+        // ----- DRAW - END -----
+
+        // ----- BORDER BOUNCE PATTERN -----
+        if (char.pos.x + char.vector.x > canvas.width - char.size.x) {
+            char.vector.x = -char.vector.x;
+
+            console.log('right bump!');
+        }
+        else if (char.pos.x < 0) {
+            char.vector.x = -char.vector.x;
+
+            console.log('left bump!');
+        }
+
+        if (char.pos.y + char.vector.y > canvas.height - char.size.y) {
+            char.vector.y = -char.vector.y;
+
+            console.log('bottom bump!');
+        }
+        else if (char.pos.y < 0) {
+            char.vector.y = -char.vector.y;
+
+            console.log('top bump!');
+        }
+
+        char.pos.x = char.pos.x + char.vector.x;
+        char.pos.y = char.pos.y + char.vector.y;
+        // ----- BORDER BOUNCE PATTERN - END -----
+
+        // TODO: remove
+        debug_delta();
+
+        requestAnimationFrame(draw);
+    }
+
+
+    canvas.addEventListener('click', function(e) {
+
+        var bbox = canvas.getBoundingClientRect();
+        console.log((e.clientX - bbox.left) + ', ' + (e.clientY - bbox.top));
+    });
+
+    // TODO: get mouse position
+    function get_mouse_pos(canvas, evt) {
+
+    }
+
+
+    function debug_delta() {
+
+
+        // No-Delay Blink Pattern
+        curr_millis = Date.now();
+        if (curr_millis - prev_millis > 1000) {
+
+            // --- DO STUFF ---
+            console.log('ping! ' + curr_millis);
+            // --- DO STUFF - END ---
+
+            prev_millis = curr_millis;
+        }
+    }
+
+</script>
+
+</body>
+</html>

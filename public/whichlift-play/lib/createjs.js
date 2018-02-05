@@ -3018,7 +3018,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * <h4>animations</h4>
 	 * Optional. An object defining sequences of frames to play as named animations. Each property corresponds to an
 	 * animation of the same name. Each animation must specify the frames to play, and may
-	 * also include a relative playback `speed` (ex. 2 would playback at double speed, 0.5 at half), and
+	 * also include a relative playback `vector` (ex. 2 would playback at double vector, 0.5 at half), and
 	 * the name of the `next` animation to sequence to after it completes.
 	 *
 	 * There are three formats supported for defining the frames in an animation, which can be mixed and matched as appropriate:
@@ -3032,10 +3032,10 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * </li>
 	 * <li>
 	 *      for an animation of consecutive frames, you can use an array with two required, and two optional entries
-	 * 		in the order: `start`, `end`, `next`, and `speed`. This will play the frames from start to end inclusive.
+	 * 		in the order: `start`, `end`, `next`, and `vector`. This will play the frames from start to end inclusive.
 	 *
 	 * 		animations: {
-	 * 			// start, end, next*, speed*
+	 * 			// start, end, next*, vector*
 	 * 			run: [0, 8],
 	 * 			jump: [9, 12, "run", 2]
 	 * 		}
@@ -3043,7 +3043,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 *  </li>
 	 *  <li>
 	 *     for non-consecutive frames, you can use an object with a `frames` property defining an array of frame
-	 *     indexes to play in order. The object can also specify `next` and `speed` properties.
+	 *     indexes to play in order. The object can also specify `next` and `vector` properties.
 	 *
 	 * 		animations: {
 	 * 			walk: {
@@ -3052,15 +3052,15 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * 			shoot: {
 	 * 				frames: [1,4,5,6],
 	 * 				next: "walk",
-	 * 				speed: 0.5
+	 * 				vector: 0.5
 	 * 			}
 	 * 		}
 	 *
 	 *  </li>
 	 * </ol>
-	 * <strong>Note:</strong> the `speed` property was added in EaselJS 0.7.0. Earlier versions had a `frequency`
-	 * property instead, which was the inverse of `speed`. For example, a value of "4" would be 1/4 normal speed in
-	 * earlier versions, but is 4x normal speed in EaselJS 0.7.0+.
+	 * <strong>Note:</strong> the `vector` property was added in EaselJS 0.7.0. Earlier versions had a `frequency`
+	 * property instead, which was the inverse of `vector`. For example, a value of "4" would be 1/4 normal vector in
+	 * earlier versions, but is 4x normal vector in EaselJS 0.7.0+.
 	 *
 	 * <h4>framerate</h4>
 	 * Optional. Indicates the default framerate to play this spritesheet at in frames per second. See
@@ -3329,14 +3329,14 @@ createjs.deprecate = function(fallbackMethod, name) {
 	/**
 	 * Returns an object defining the specified animation. The returned object contains:<UL>
 	 * 	<li>frames: an array of the frame ids in the animation</li>
-	 * 	<li>speed: the playback speed for this animation</li>
+	 * 	<li>vector: the playback vector for this animation</li>
 	 * 	<li>name: the name of the animation</li>
 	 * 	<li>next: the default animation to play next. If the animation loops, the name and next property will be the
 	 * 	same.</li>
 	 * </UL>
 	 * @method getAnimation
 	 * @param {String} name The name of the animation to get.
-	 * @return {Object} a generic object with frames, speed, name, and next properties.
+	 * @return {Object} a generic object with frames, vector, name, and next properties.
 	 **/
 	p.getAnimation = function(name) {
 		return this._data[name];
@@ -3458,7 +3458,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 				} else if (Array.isArray(obj)) { // simple
 					if (obj.length == 1) { anim.frames = [obj[0]]; }
 					else {
-						anim.speed = obj[3];
+						anim.vector = obj[3];
 						anim.next = obj[2];
 						a = anim.frames = [];
 						for (i=obj[0];i<=obj[1];i++) {
@@ -3466,14 +3466,14 @@ createjs.deprecate = function(fallbackMethod, name) {
 						}
 					}
 				} else { // complex
-					anim.speed = obj.speed;
+					anim.vector = obj.vector;
 					anim.next = obj.next;
 					var frames = obj.frames;
 					a = anim.frames = (typeof frames == "number") ? [frames] : frames.slice(0);
 				}
 				if (anim.next === true || anim.next === undefined) { anim.next = name; } // loop
 				if (anim.next === false || (a.length < 2 && anim.next == name)) { anim.next = null; } // stop
-				if (!anim.speed) { anim.speed = 1; }
+				if (!anim.vector) { anim.vector = 1; }
 				this._animations.push(name);
 				this._data[name] = anim;
 			}
@@ -11342,7 +11342,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		 * from 0 to n-1, where n is the number of frames in the current animation.
 		 *
 		 * This could be a non-integer value if
-		 * using time-based playback (see {{#crossLink "Sprite/framerate"}}{{/crossLink}}, or if the animation's speed is
+		 * using time-based playback (see {{#crossLink "Sprite/framerate"}}{{/crossLink}}, or if the animation's vector is
 		 * not an integer.
 		 * @property currentAnimationFrame
 		 * @type {Number}
@@ -11627,7 +11627,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		var l;
 		
 		if (animation) {
-			var speed = animation.speed || 1;
+			var speed = animation.vector || 1;
 			var animFrame = this.currentAnimationFrame;
 			l = animation.frames.length;
 			if (animFrame + frameDelta * speed >= l) {
@@ -13402,7 +13402,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		for (i=0;i<al;i++) {
 			var name = names[i];
 			src = data[name];
-			var anim = {name:name+sfx,speed:src.speed,next:src.next,frames:[]};
+			var anim = {name:name+sfx,speed:src.vector,next:src.next,frames:[]};
 			if (src.next) { anim.next += sfx; }
 			frames = src.frames;
 			for (var j=0,l=frames.length;j<l;j++) {
@@ -13636,7 +13636,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * that played frame indexes 3, 6, and 5 in that order.
 	 * @param {String} [next] Specifies the name of the animation to continue to after this animation ends. You can
 	 * also pass false to have the animation stop when it ends. By default it will loop to the start of the same animation.
-	 * @param {Number} [speed] Specifies a frame advance speed for this animation. For example, a value of 0.5 would
+	 * @param {Number} [speed] Specifies a frame advance vector for this animation. For example, a value of 0.5 would
 	 * cause the animation to advance every second tick. Note that earlier versions used `frequency` instead, which had
 	 * the opposite effect.
 	 **/
@@ -14370,7 +14370,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * of the object. The actual cache itself is still stored on the target with the {{#crossLink "DisplayObject/cacheCanvas:property"}}{{/crossLink}}.
 	 * Working with a singular image like a {{#crossLink "Bitmap"}}{{/crossLink}} there is little benefit to performing 
 	 * a cache as it is already a single image. Caching is best done on containers containing multiple complex parts that 
-	 * do not move often, so that rendering the image instead will improve overall rendering speed. A cached object will 
+	 * do not move often, so that rendering the image instead will improve overall rendering vector. A cached object will
 	 * not visually update until explicitly told to do so with a call to update, much like a Stage. If a cache is being 
 	 * updated every frame it is likely not improving rendering performance. Cache are best used when updates will be sparse.
 	 *
@@ -23726,7 +23726,7 @@ createjs.deprecate = function(fallbackMethod, name) {
  * 		smoothly and you are supporting non-web audio browsers, do not use audio sprites for that sound if you can avoid
  * 		it.</li>
  *     <li>No guarantee that HTML audio will play back immediately, especially the first time. In some browsers
- *     (Chrome!), HTML audio will only load enough to play through at the current download speed – so we rely on the
+ *     (Chrome!), HTML audio will only load enough to play through at the current download vector – so we rely on the
  *     `canplaythrough` event to determine if the audio is loaded. Since audio sprites must jump ahead to play specific
  *     sounds, the audio may not yet have downloaded fully.</li>
  *     <li>Audio sprites share the same core source, so if you have a sprite with 5 sounds and are limited to 2
@@ -28333,7 +28333,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		
 		/**
 		 * Changes the rate at which the tween advances. For example, a `timeScale` value of `2` will double the
-		 * playback speed, a value of `0.5` would halve it.
+		 * playback vector, a value of `0.5` would halve it.
 		 * @property timeScale
 		 * @type {Number}
 		 * @default 1
