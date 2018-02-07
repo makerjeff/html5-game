@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>hold button play</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<button id="button1">button1</button>
+<button id="button2">button2</button>
+
+<script>
+
+
+    var prev_millis = Date.now();
+    var curr_millis;
+    var interval = 1000;
+
+    window.addEventListener('click', function(e) {
+//        console.log('something is clicked on screen: ');
+//        console.log(e.target);
+
+        if (e.target.id === 'button1') {
+            console.log('button1 clicked');
+        }
+
+        else if (e.target.id === 'button2') {
+            console.log('button2 clicked');
+        }
+
+        else {
+            console.log('Something unidentified has been clicked. ');
+        }
+    });
+
+
+    window.addEventListener('keydown', function(e) {
+        console.log(e.keyCode);
+    });
+
+
+    window.addEventListener('load', function(e) {
+
+        console.log('everything loaded');
+        // start the animation
+        requestAnimationFrame(main_loop);
+    });
+
+
+    function main_loop() {
+
+        console.log('frame fired');
+
+        curr_millis = Date.now();
+
+        if (curr_millis - prev_millis >= interval) {
+
+            console.log('ping!');
+
+        }
+
+        prev_millis = curr_millis;
+
+
+        requestAnimationFrame(main_loop);
+
+    }
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>game view</title>
+    <link rel="icon" href="./favicon.ico" />
+
+</head>
+<body>
+<h1>Game View</h1>
+
+<script>
+    var letters_library = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    var random_room_code = [];
+
+    for(var i = 0; i < 4; i++) {
+        random_room_code.push(letters_library[Math.floor(Math.random() * letters_library.length)]);
+    }
+
+    console.log(random_room_code.join(''));
+
+    var RoomCodeGenerator = {
+
+        rooms: [],
+
+        library: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+
+        createRoomCode: function(num) {
+
+            var buffer = [];
+
+            for (var i = 0; i < num; i++) {
+                buffer.push(this.library[Math.floor(Math.random() * this.library.length)]);
+            }
+            return buffer.join('');
+        },
+
+        loadRoom: function() {
+            this.rooms.push(this.createRoomCode(5));
+        },
+
+        removeRoom: function(room) {
+            this.rooms.splice(this.rooms.indexOf(room), 1);
+        }
+    };
+
+
+
+</script>
+
+</body>
+</html>

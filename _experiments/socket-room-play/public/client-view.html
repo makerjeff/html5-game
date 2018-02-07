@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SRP-3</title>
+    <title>client view</title>
+    <link rel="icon" href="./favicon.ico"/>
 
     <style>
 
@@ -25,6 +26,7 @@
 
 <body>
 
+<h1>Client View</h1>
     <form id="submit_form" name="submit_form">
         <label for="input_room">ROOM CODE</label> <br>
         <input id="input_room" type="text" name="input_room" autocomplete="off">
@@ -50,11 +52,16 @@
 
         // socket connections
         socket.on('connect', function() {
+
+            // tell the server which room to join.
             socket.emit('room', room);
         });
         socket.on('message', function(data) {
             console.log('Incoming message from server: ', data);
         });
+
+
+
 
         // basic variables
         var form = document.getElementById('submit_form');
@@ -66,20 +73,12 @@
         form.addEventListener('submit', function(e) {
             e.preventDefault();
 
-    //        var target = this.elements[0];
-    //        debug.log(target.value);
-    //        target.value = '';
-
             // TODO: iterate through items in elements.
             for (item in this.elements) {
                 debug.log(item);
                 item.value = '';
             }
 
-    //        this.elements.forEach(function(elem,ind,arr) {
-    //            debug.log(elem.value);
-    //            elem.value = '';
-    //        });
         });
 
 
