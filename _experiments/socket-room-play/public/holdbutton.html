@@ -4,68 +4,111 @@
     <meta charset="UTF-8">
     <title>hold button play</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            font-family: Arial, sans-serif;
+        }
+    </style>
 </head>
 <body>
 
-<button id="button1">button1</button>
-<button id="button2">button2</button>
+<h1 id="output_01">0</h1>
+<h1 id="output_02">0</h1>
+<h1 id="output_03">0</h1>
+<h1 id="output_04">0</h1>
 
 <script>
 
+    //
+    var output_div_01 = document.getElementById('output_01');
+    var output_div_02 = document.getElementById('output_02');
+    var output_div_03 = document.getElementById('output_03');
+    var output_div_04 = document.getElementById('output_04');
 
-    var prev_millis = Date.now();
-    var curr_millis;
-    var interval = 1000;
 
-    window.addEventListener('click', function(e) {
-//        console.log('something is clicked on screen: ');
-//        console.log(e.target);
+    var Controller = {
+        value_a: 0,
+        value_b: 0,
+        value_c: 0,
+        value_d: 0,
+        left_key_pressed: false,
+        up_key_pressed: false,
+        right_key_pressed: false,
+        down_key_pressed: false,
 
-        if (e.target.id === 'button1') {
-            console.log('button1 clicked');
+        query_inputs: function() {
+            if (this.left_key_pressed) {
+                this.value_a++;
+            }
+            if (this.up_key_pressed) {
+                this.value_b++;
+            }
+            if (this.right_key_pressed) {
+                this.value_c++;
+            }
+            if (this.down_key_pressed) {
+                this.value_d++;
+            }
+        },
+
+        draw: function() {
+            output_div_01.innerHTML = this.value_a;
+            output_div_02.innerHTML = this.value_b;
+            output_div_03.innerHTML = this.value_c;
+            output_div_04.innerHTML = this.value_d;
+        },
+
+        value_drain: function () {
+            if (this.value_a > 0 && Controller.left_key_pressed === false) {
+                this.value_a--;
+            }
+            if (this.value_b > 0 && Controller.up_key_pressed === false) {
+                this.value_b--;
+            }
+            if (this.value_c > 0 && Controller.right_key_pressed === false) {
+                this.value_c--;
+            }
+            if (this.value_d > 0 && Controller.down_key_pressed === false) {
+                this.value_d--;
+            }
         }
+    };
 
-        else if (e.target.id === 'button2') {
-            console.log('button2 clicked');
-        }
 
-        else {
-            console.log('Something unidentified has been clicked. ');
-        }
-    });
+
 
 
     window.addEventListener('keydown', function(e) {
-        console.log(e.keyCode);
+        if (e.keyCode === 65) {Controller.left_key_pressed = true;}
+        if (e.keyCode === 87) {Controller.up_key_pressed = true;}
+        if (e.keyCode === 68) {Controller.right_key_pressed = true;}
+        if (e.keyCode === 83) {Controller.down_key_pressed = true;}
     });
+
+    window.addEventListener('keyup', function(e) {
+        if (e.keyCode === 65) {Controller.left_key_pressed = false;}
+        if (e.keyCode === 87) {Controller.up_key_pressed = false;}
+        if (e.keyCode === 68) {Controller.right_key_pressed = false;}
+        if (e.keyCode === 83) {Controller.down_key_pressed = false;}
+    });
+
 
 
     window.addEventListener('load', function(e) {
-
-        console.log('everything loaded');
-        // start the animation
         requestAnimationFrame(main_loop);
     });
 
-
     function main_loop() {
-
-        console.log('frame fired');
-
-        curr_millis = Date.now();
-
-        if (curr_millis - prev_millis >= interval) {
-
-            console.log('ping!');
-
-        }
-
-        prev_millis = curr_millis;
-
+        Controller.query_inputs();
+        Controller.draw();  //TODO: replace this with a Game object.
+        Controller.value_drain();
 
         requestAnimationFrame(main_loop);
-
     }
+
+
+
+
 
 </script>
 
