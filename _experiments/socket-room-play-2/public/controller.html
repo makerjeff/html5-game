@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GameField</title>
+</head>
+<body>
+
+<div id="form" class="faux_form">
+    <input id="room_input" type="text" class="room_input" autocomplete="off">
+    <button id="submit_button">join room</button>
+</div>
+
+<button id="debug_button">debug</button>
+
+<div id="result_div"></div>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="./lib/debugLog.js"></script>
+<script src="./lib/RoomCodeGenerator.js"></script>
+<script>
+    var RCG = new RoomCodeGenerator();
+    var socket = io.connect();  // initiates socket connection.
+
+
+    var debug_button = document.getElementById('debug_button');
+
+    debug_button.onclick = function(e) {
+        var value = RCG.createRoomCode(4);
+
+        debug.log(value);
+    };
+
+
+
+</script>
+
+</body>
+</html>

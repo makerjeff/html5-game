@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>lunar lander</title>
+
+    <style>
+        canvas {
+            background: lightgray;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="game" width="800" height="500"></canvas>
+
+
+
+
+
+<script>
+    var canvas = document.getElementById('game');
+    var ctx = canvas.getContext('2d');
+
+//    // rect
+//    ctx.rect(0, 0, 100, 100);
+//    ctx.fillStyle = 'black';
+//    ctx.fill();
+//
+//    ctx.beginPath();
+//
+//    // circle
+//    ctx.arc(100, 100, 20, 0, 2*Math.PI);
+//    ctx.fillStyle = 'red';
+//
+//    // TODO: ctx.beginPath() wipes the buffer and starts anew.
+////    ctx.closePath();
+//    ctx.fill();
+//
+//
+//    ctx.beginPath();
+//    ctx.moveTo(100, 100);
+//    ctx.lineTo(200, 100);
+//    ctx.lineTo(100, 200);
+//    ctx.lineTo(100, 100);
+//    ctx.fillStyle = 'blue';
+//    ctx.fill();
+
+    var x = 0;
+
+
+    function draw() {
+        ctx.clearRect(0,0,canvas.width, canvas.height);
+
+        // draw black circle
+        ctx.beginPath();
+        ctx.arc(x, 100, 25, 0, 2*Math.PI);
+        ctx.fillStyle = 'black';
+        ctx.strokeStyle = 'black';
+//        ctx.fill();
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        // increment
+        x = x + 2;
+
+        // if it it goes off screen...
+        if ( x > canvas.width) {
+            x = 0;
+        }
+
+        requestAnimationFrame(draw);
+    }
+
+    draw();
+
+
+
+</script>
+
+</body>
+</html>

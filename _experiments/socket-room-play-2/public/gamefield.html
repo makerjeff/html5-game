@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GameField</title>
+
+    <style>
+        canvas {
+            background: rgb(0,0,0);
+        }
+    </style>
+</head>
+<body>
+
+
+<script>
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    canvas.id = 'game-canvas';
+
+    canvas.width = 300;
+    canvas.height = 400;
+    document.body.appendChild(canvas);
+
+    var Monsters = [];
+
+
+    window.addEventListener('load', function(e) {
+
+        var boxMonster = new BoxMonster(40, 40, '#FF0000');
+        boxMonster.draw();
+
+        main_loop();
+
+
+
+    });
+
+
+    function main_loop() {
+        draw();
+    }
+
+
+    function draw() {
+
+
+    }
+
+    function BoxMonster (width, height, style) {
+        this.width = width;
+        this.height = height;
+        this.position = {x: 0, y: 0};
+        this.style = style;
+
+        Monsters.push(this);
+        console.log('Added Monster to Monsters array. ');
+    }
+
+    BoxMonster.prototype.draw = function(){
+        ctx.save();
+
+        ctx.strokeStyle = this.style;
+        ctx.moveTo(0, 0);
+        ctx.lineTo(this.width, 0);
+        ctx.lineTo(this.width, this.height);
+        ctx.lineTo(0, this.height);
+        ctx.closePath();
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.restore();
+    };
+
+
+
+
+</script>
+
+</body>
+</html>
