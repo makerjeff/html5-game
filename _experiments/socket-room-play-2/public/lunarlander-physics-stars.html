@@ -47,10 +47,25 @@
             ctx.beginPath();
             ctx.arc(star.x, star.y, star.radius, 0, 2 * Math.PI);
             ctx.closePath();
-            ctx.fillStyle = '#bbb';
+
+            ctx.fillStyle = 'rgba(255,255,255,' + star.alpha + ')';
+
+                if (star.decreasing === true) {
+                    star.alpha -= star.dRatio;
+
+                    if (star.alpha < 0.1) {
+                        star.decreasing = false;
+                    }
+
+                } else {
+                    star.alpha += star.dRatio;
+
+                    if (star.alpha > 0.95) {
+                        star.decreasing = true;
+                    }
+                }
             ctx.fill();
         }
-
         ctx.restore();
     }
 
