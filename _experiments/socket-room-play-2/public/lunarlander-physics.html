@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>lunar lander</title>
+    <title>lunar lander - physics</title>
 
     <style>
         canvas {
@@ -32,6 +32,11 @@
             y: 0,
         },
         angle: 0,
+        velocity: {
+            x: 0,
+            y: 0
+        },
+        thrust: -0.25,
         engineOn: false,
         rotatingLeft: false,
         rotatingRight: false
@@ -104,8 +109,16 @@
     document.addEventListener('keydown', keyPressed);
     document.addEventListener('keyup', keyReleased);
 
+    // forces
+    var gravity = -0.1;
+
     // update ship
     function updateSpaceship() {
+
+        // move based on velocity
+        spaceship.position.x += spaceship.velocity.x;
+        spaceship.position.y += spaceship.velocity.y;
+
         if (spaceship.rotatingRight) {
             spaceship.angle += Math.PI / 180;
         }
@@ -114,9 +127,17 @@
         }
 
         if (spaceship.engineOn) {
-            spaceship.position.x += Math.sin(spaceship.angle);
-            spaceship.position.y -= Math.cos(spaceship.angle);  // negative because Y on canvas is flipped.
+//            spaceship.position.x += Math.sin(spaceship.angle);
+//            spaceship.position.y -= Math.cos(spaceship.angle);  // negative because Y on canvas is flipped.
+            // ^^ DEPRECATED
+            // below implement forces.
+            spaceship.velocity.x += spaceship.thrust * Math.sin(-spaceship.angle);
+            spaceship.velocity.y += spaceship.thrust * Math.cos(spaceship.angle);
+
         }
+
+        // implement gravity
+        spaceship.velocity.y -= gravity;
     }
 
     // MAIN DRAW FUNCTION
