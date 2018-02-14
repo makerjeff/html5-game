@@ -18,7 +18,7 @@
     canvas.width = width;
     canvas.height = height;
 
-    keys = [];
+    keys = [];  // JWXNOTE: interesting way to buffer keycodes.
 
     document.body.addEventListener('keydown', function(e) {
         keys[e.keyCode] = true;
@@ -28,6 +28,7 @@
         keys[e.keyCode] = false;
     });
 
+    // SHIP CONSTRUCTOR
     var Ship = function (x, y, radius, color) {
         this.x = x || 0;            // great way to set a default
         this.y = y || 0;            // great way to set a default
@@ -114,7 +115,6 @@
 
     var ship = new Ship(width/2, height/2, 10);
 
-
     // main render loop
     function render() {
         //check keys
@@ -136,7 +136,12 @@
         requestAnimationFrame(render);
     }
 
-    render();
+
+    window.addEventListener('load', function(e) {
+
+        render();
+
+    });
 
 
 </script>
