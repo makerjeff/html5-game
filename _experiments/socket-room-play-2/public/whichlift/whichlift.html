@@ -13,47 +13,6 @@
 
 <script>
 
-    var width = 640;
-    var height = 480;
-
-    var canvas = document.createElement('canvas');
-    var ctx = canvas.getContext('2d');
-    canvas.id = 'game-canvas';
-
-    canvas.width = width;
-    canvas.height = height;
-
-    document.body.appendChild(canvas);
-
-
-    //TODO: start again here.
-
-    var position = {x: 0, y: 0};
-    var speed = 1;
-    var is_moving = false;
-
-    function update_text() {
-
-        if (position.x < canvas.width) {
-            if (is_moving) {
-                position.x += speed;
-            }
-        }
-
-
-    }
-
-    function render_text() {
-        ctx.font = '20px Arial';
-        ctx.fillStyle = '#000';
-        ctx.textBaseline = 'top';
-        ctx.fillText('hello world', position.x, position.y);
-    }
-
-
-    function render() {
-
-    }
 
 
 
