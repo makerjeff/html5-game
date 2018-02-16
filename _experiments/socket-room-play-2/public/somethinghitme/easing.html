@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>object easing</title>
+</head>
+<body>
+
+<script>
+    var width = 500;
+    var height = 500;
+    var mX = 0;             // global mouse X
+    var mY = 0;             // global mouse Y
+    var started = false;    // flag to start rendering.
+
+    // create and add canvas
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    canvas.id = 'game-canvas';
+    canvas.width = width;
+    canvas.height = height;
+    document.body.appendChild(canvas);
+
+    // update mouseX and mouseY to be used globally.
+    canvas.addEventListener('mousemove', function(e) {
+        mX = e.pageX;
+        mY = e.pageY;
+    });
+
+    // check to see if mouse has entered canvas, if so, render.
+    canvas.addEventListener('mouseenter', function(e) {
+        if (!started) {
+            started = true;
+            render();
+        }
+    });
+    canvas.addEventListener('mouseleave', function(e) {
+        started = false;
+    });
+
+    // --- BALL CONSTRUCTOR SET ---
+    var Ball = function (x, y, radius, color) {
+        this.x = x || 0;        // again, great way to set defaults.
+        this.y = y || 0;
+        this.radius = radius || 10;
+        this.speed = 20;
+        this.color = color || 'rgb(255,0,0)';
+
+        this.x -= this.radius / 2;  //TODO: wut?
+        this.y -= this.radius / 2;
+    };
+
+    // update the ball...
+    Ball.prototype.update = function (x, y) {
+        // get target X and target Y
+        this.targetX = x;
+        this.targetY = y;
+
+        // move toward it (NOTE: this is the magic)
+        this.x += (this.targetX-this.x) / this.speed;
+        this.y += (this.targetY-this.y) / this.speed;
+    };
+
+    // ... then draw the ball
+    Ball.prototype.render = function() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.fill();
+    };
+    // -----------------------------
+
+    // instantiate ball
+    var ball1 = new Ball(width/2, height/2, 10);
+
+    // main render function
+    function render() {
+        ctx.clearRect(0, 0, width, height);
+        ball1.update(mX, mY);
+        ball1.render();
+
+        if (started) {
+            requestAnimationFrame(render);
+        }
+    }
+
+    // fire the laysers!
+    render();
+
+
+
+</script>
+
+</body>
+</html>
