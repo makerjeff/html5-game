@@ -8,6 +8,8 @@ const chalk = require('chalk');
 const body_parser = require('body-parser');
 const clear = require('clear');
 
+const get_lift = require('./modules/get_lift');
+
 // middleware
 app.use(body_parser.urlencoded({extended: false}));
 app.use(body_parser.json());
@@ -22,12 +24,14 @@ let client_list = {ids: [], objects: []};
 let room_list = [];
 
 // TODO: restructure to rooms object, registering each client as a 'player' or 'game'
-
 let room_schema = {
     roomCode: 'ABCD',
     game: '(socket.id string)', //only one available
     players: ['(socket.id string)', '(socket.id string)', '(socket.id string)']
 };
+
+let game_waiting = false;
+let current_pinger = '';
 
 
 // socket.io
@@ -43,9 +47,6 @@ io.on('connection', function(socket) {
     client_list.ids.push(socket.id);
     client_list.objects.push({id: socket.id, name: ''});
 
-
-
-
     // when a user disconnects...
     socket.on('disconnect', function() {
         console.log(`User ${chalk.red(socket.id)} disconnected. `);
@@ -59,6 +60,41 @@ io.on('connection', function(socket) {
 
     });
 
+    // PING PING
+    socket.on('_ping', function(data) {
+
+        if (!game_waiting) {
+            game_waiting = true;
+            current_pinger = socket.id;
+
+            io.emit('game_hold', {who: socket.id});
+
+
+            // get a lift
+            get_lift.get_lift(3000).then(function(val) {
+                console.log('fulfilled.');
+
+                var payload = {lift: val, who: current_pinger};
+
+                // TODO: emit to room.
+                io.emit('game_message', payload);
+
+                // reset
+                game_waiting = false;
+                current_pinger = '';
+
+            }, function(reason){
+                console.log(reason);
+            });
+
+        } else {
+            console.log(`${current_pinger} has already pressed the button.`);
+        }
+    });
+
+
+
+
 
     // room connection
     socket.on('room', (room) => {
@@ -68,14 +104,10 @@ io.on('connection', function(socket) {
 
         }
 
-
         // TODO: if room exists, join it.
-
         // TODO: else, send direct message back to socket
-
         socket.join(room);
         console.log(`${chalk.blue(socket.id)} joined room ${chalk.green(room)}`);
-
         io.sockets.in(room).emit('message', `Welcome ${socket.id} to the room!`);
 
     });
