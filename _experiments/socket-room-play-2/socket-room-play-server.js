@@ -1,34 +1,29 @@
 // socket-play server 2017.12.29
 
-const app = require('express')();
-const express = require('express');
-const http = require('http').Server(app);
-const io = require('socket.io')(http);      // socket.io REQUIRED.
-const chalk = require('chalk');
-const body_parser = require('body-parser');
-const clear = require('clear');
-
-const get_lift = require('./modules/get_lift');
+const app           = require('express')();
+const express       = require('express');
+const http          = require('http').Server(app);
+const io            = require('socket.io')(http);      // socket.io REQUIRED.
+const chalk         = require('chalk');
+const body_parser   = require('body-parser');
+const clear         = require('clear');
+const get_lift      = require('./modules/get_lift');
 
 // middleware
 app.use(body_parser.urlencoded({extended: false}));
 app.use(body_parser.json());
 
-// routes
-app.get('/', function(req, res) {
-    res.sendFile(__dirname + '/public/client-view.html');
-});
 
 // client object.
 let client_list = {ids: [], objects: []};
 let room_list = [];
 
-// TODO: restructure to rooms object, registering each client as a 'player' or 'game'
-let room_schema = {
-    roomCode: 'ABCD',
-    game: '(socket.id string)', //only one available
-    players: ['(socket.id string)', '(socket.id string)', '(socket.id string)']
-};
+// // TODO: restructure to rooms object, registering each client as a 'player' or 'game'
+// let room_schema = {
+//     roomCode: 'ABCD',
+//     game: '(socket.id string)', //only one available
+//     players: ['(socket.id string)', '(socket.id string)', '(socket.id string)']
+// };
 
 let game_waiting = false;
 let current_pinger = '';
@@ -38,9 +33,8 @@ let current_pinger = '';
 // when a user connects...
 io.on('connection', function(socket) {
 
-    // let user know they've connected...
+    // server log output
     console.log(`A user with the id ${chalk.blue(socket.id)} has connected.`);
-
     console.log(`Adding ${chalk.blue(socket.id)} to client list at position ${client_list.ids.length}`);
 
     // update client_list
@@ -122,12 +116,16 @@ io.on('connection', function(socket) {
 
 });
 
+// routes
+app.get('/', function(req, res) {
+    res.sendFile(__dirname + '/public/client-view.html');
+});
 
 app.get('/clients', (req, res) => {
     res.send(client_list);
 });
 
-//
+// fallthrough
 app.use(express.static('public/'));
 
 

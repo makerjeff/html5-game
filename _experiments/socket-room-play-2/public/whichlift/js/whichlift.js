@@ -4,15 +4,11 @@
 var socket = io.connect();
 var room = 'abc123';
 
-// create ping button
-var ping_button = document.createElement('button');
-ping_button.id = 'ping_button';
-ping_button.innerHTML = 'click me';
-document.body.appendChild(ping_button);
+var game_details = {};
 
-// create result div
-var result_div = document.createElement('div');
-document.body.appendChild(result_div);
+// create ping button
+var ping_button = document.getElementById('button');
+var result_div = document.getElementById('result_div');
 
 // SOCKET EVENTS
 socket.on('connect', function() {
