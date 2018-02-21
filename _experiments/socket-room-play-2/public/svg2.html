@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SVG</title>
+    <style>
+        ::selection {
+            color: white;
+            background: #ff0058;
+        }
+    </style>
+</head>
+<body>
+
+<p>Some random text to highlight.</p>
+
+
+
+<script>
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttributeNS(null, 'id', 'svgDoc');
+    svg.setAttributeNS(null, 'height', '120');
+    svg.setAttributeNS(null, 'width', '100%');
+
+    document.getElementsByTagName('body')[0].appendChild(svg);
+
+    ///
+    var svgDoc = document.getElementById('svgDoc');
+
+    var txtElem = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    txtElem.setAttributeNS(null, 'x', 20);
+    txtElem.setAttributeNS(null, 'y', 40);
+
+    var theText = 'hello world! This is SVG text created dynamically. ';
+    var theMSG = document.createTextNode(theText);
+    txtElem.appendChild(theMSG);
+    svgDoc.appendChild(txtElem);
+
+
+</script>
+
+</body>
+</html>
