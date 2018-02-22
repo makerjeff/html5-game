@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SVG4</title>
+    <style>
+
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+        ::selection {
+            color: white;
+            background: #ff0058;
+        }
+        .bg_text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        #result_div {
+
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 640px;
+            height: 480px;
+
+            border: 1px solid black;
+            box-sizing: border-box;
+
+            background-color: rgba(0,0,0,0);
+
+            z-index: 100;
+        }
+
+        #input_div {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 640px;
+            height: 480px;
+
+            background: rgba(0,255,0,0);
+
+            z-index: 200;
+        }
+
+        #interactive_field {
+            /*'position: relative' needed for*/
+            position: relative;
+            margin: 20px;
+        }
+
+        #reset_button {
+            position: relative;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<p class="bg_text">Some random text to highlight.</p>
+
+<!--<svg width="120" height="120" >-->
+    <!--<path d="M20,10 H100 L90,90 H10 Z" fill="rgba(0,0,0,0)" stroke="black" stroke-width="5"></path>-->
+<!--</svg>-->
+
+
+<div id="interactive_field">
+    <div id="input_div"></div>
+    <div id="result_div">
+        <svg id="svg_box" width="640" height="480">
+            <!--<path id="svg_path" d=""></path>-->
+            <circle id="circle_id" cx="50" cy="50" r="40" stroke="rgba(0,0,0,0)" stroke-width="0" fill="red"></circle>
+        </svg>
+    </div>
+</div>
+
+<button id="reset_button">clear</button>
+
+
+
+
+<script>
+
+    var input_div = document.getElementById('input_div');
+    var result_div = document.getElementById('result_div');
+    var circle = document.getElementById('circle_id');
+
+    var input_bbox = input_div.getBoundingClientRect();
+
+    var xPos = 0;
+    var yPos = 0;
+
+    var mouse_down = false;
+    var mouse_moving = false;
+
+    function update_ball(x, y) {
+
+        circle.setAttribute('cx', x);
+        circle.setAttribute('cy', y);
+
+
+    }
+
+
+    input_div.addEventListener('mousedown', function(e) {
+
+        mouse_down = true;
+
+        console.log('mouse down');
+    });
+
+    input_div.addEventListener('mouseup', function(e) {
+        mouse_down = false;
+
+        console.log('mouse up');
+    });
+
+    input_div.addEventListener('mousemove', function(e) {
+
+        if (mouse_down) {
+            xPos = e.clientX-input_bbox.left;
+            yPos = e.clientY-input_bbox.top;
+
+            console.log(`${xPos}, ${yPos}`);
+
+            update_ball(xPos, yPos);
+
+        }
+
+    });
+
+
+
+</script>
+
+</body>
+</html>
