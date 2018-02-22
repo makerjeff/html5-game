@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SVG3</title>
+    <style>
+
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+        ::selection {
+            color: white;
+            background: #ff0058;
+        }
+        .bg_text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        #result_div {
+
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 640px;
+            height: 480px;
+
+            border: 1px solid black;
+            box-sizing: border-box;
+
+            background-color: rgba(0,0,0,0);
+
+            z-index: 100;
+        }
+
+        #input_div {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 640px;
+            height: 480px;
+
+            background: rgba(0,255,0,0.2);
+
+            z-index: 200;
+        }
+
+        #interactive_field {
+            /*'position: relative' needed for*/
+            position: relative;
+            margin: 20px;
+        }
+
+        #reset_button {
+            position: relative;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<p class="bg_text">Some random text to highlight.</p>
+
+<!--<svg width="120" height="120" >-->
+    <!--<path d="M20,10 H100 L90,90 H10 Z" fill="rgba(0,0,0,0)" stroke="black" stroke-width="5"></path>-->
+<!--</svg>-->
+
+
+<div id="interactive_field">
+    <div id="input_div"></div>
+    <div id="result_div">
+        <svg id="svg_box" width="640" height="480">
+            <path id="svg_path" d=""></path>
+        </svg>
+    </div>
+</div>
+
+<button id="reset_button">clear</button>
+
+
+
+
+<script>
+
+    var input_div = document.getElementById('input_div');
+    var result_div = document.getElementById('result_div');
+    var clear_button = document.getElementById('reset_button');
+
+    var svgElement = document.getElementById('svg_box');
+    var pathElement = document.getElementById('svg_path');
+
+    var bbox = input_div.getBoundingClientRect();
+
+    var points = [];
+    var pathArray = [];
+    var pathString = '';
+
+
+
+    function clear_points() {
+        points = [];
+    }
+
+    function build_point(x,y) {
+        return {x:x, y:y};
+    }
+
+    function update() {
+
+        pathArray = [];
+        pathString = '';
+
+        if (points.length >= 1) {
+
+            points.forEach(function(elem, ind, arr) {
+
+                if (points.length === 1) {
+                    //M prefix
+                    pathArray.push('M');
+
+                } else {
+                    //L prefix
+                    pathArray.push('L');
+                }
+
+                pathArray.push(elem.x);
+                pathArray.push(',');
+                pathArray.push(elem.y);
+                pathArray.push(' ');
+
+                pathString = pathArray.join('');
+                pathString = pathString + 'Z';
+
+            });
+        } else {
+            console.log('first point, no data yet');
+        }
+
+        // TODO: dynamically build this string
+//        pathElement.setAttribute('d', 'M0,0 L10,20 L20,40 L400,200 L0,100 Z');
+
+        pathElement.setAttribute('d', pathString);
+        pathElement.setAttribute('stroke', '#000');
+        pathElement.setAttribute('fill', 'rgba(0,0,0,0)');
+        pathElement.setAttribute('stroke-width', 5);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+    input_div.addEventListener('click', function(e) {
+        points.push(build_point(e.clientX-bbox.left, e.clientY-bbox.top));
+        console.log(points);
+
+        update();
+    });
+
+    clear_button.addEventListener('click', function(e) {
+        clear_points();
+        console.log('points cleared', points);
+
+        update();
+    });
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>
