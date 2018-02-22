@@ -155,6 +155,54 @@
     }
 
 
+    // dummy data
+    var random_array = [{x: 0, y: 0 }, {x:200, y:0}, {x:200, y:150}, {x:0, y:150}];
+
+    // work on string
+    function update_2(points_array) {
+
+        var output_array = [];
+        var output_string = '';
+
+        points_array.forEach(function(elem, ind, arr) {
+//            console.log(elem.x, elem.y);
+
+            // build string
+
+            // first element, prepend 'M'
+
+            if (ind === 0) {
+                output_array.push('M');
+                output_array.push(elem.x);
+                output_array.push(',');
+                output_array.push(elem.y);
+                output_array.push(' ');
+            } else {
+                output_array.push('L');
+                output_array.push(elem.x);
+                output_array.push(',');
+                output_array.push(elem.y);
+                output_array.push(' ');
+            }
+
+        });
+
+        output_array.push('Z');
+
+        output_string = output_array.join('');
+
+        console.log(output_string);
+
+        //        pathElement.setAttribute('d', 'M0,0 L10,20 L20,40 L400,200 L0,100 Z');
+
+        pathElement.setAttribute('d', output_string);
+        pathElement.setAttribute('stroke', '#000');
+        pathElement.setAttribute('fill', 'rgba(0,0,0,0)');
+        pathElement.setAttribute('stroke-width', 5);
+
+    }
+
+
 
 
 
@@ -168,14 +216,14 @@
         points.push(build_point(e.clientX-bbox.left, e.clientY-bbox.top));
         console.log(points);
 
-        update();
+        update_2(points);
     });
 
     clear_button.addEventListener('click', function(e) {
         clear_points();
         console.log('points cleared', points);
 
-        update();
+        update_2(points);
     });
 
 
