@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>SVG4</title>
     <style>
 
@@ -63,6 +64,10 @@
             position: relative;
             display: inline-block;
         }
+
+        #svg_box {
+
+        }
     </style>
 </head>
 <body>
@@ -79,66 +84,134 @@
     <div id="result_div">
         <svg id="svg_box" width="640" height="480">
             <!--<path id="svg_path" d=""></path>-->
-            <circle id="circle_id" cx="50" cy="50" r="40" stroke="rgba(0,0,0,0)" stroke-width="0" fill="red"></circle>
+            <circle id="circle_id" cx="50" cy="50" r="10" stroke="rgba(0,0,0,0)" stroke-width="0" fill="red"></circle>
         </svg>
     </div>
 </div>
 
-<button id="reset_button">clear</button>
+<button id="clear_button">clear</button>
 
 
 
 
 <script>
+    var input_div = document.getElementById('input_div'),
+        result_div = document.getElementById('result_div');
 
-    var input_div = document.getElementById('input_div');
-    var result_div = document.getElementById('result_div');
+    var clear_button = document.getElementById('clear_button');
+
+    var svg_box = document.getElementById('svg_box');
+
     var circle = document.getElementById('circle_id');
 
-    var input_bbox = input_div.getBoundingClientRect();
-
-    var xPos = 0;
-    var yPos = 0;
+    var start_color = 'black';
+    var line_color = 'black';
+    var end_color = 'black';
 
     var mouse_down = false;
-    var mouse_moving = false;
 
-    function update_ball(x, y) {
+    var currentPos = {
+        x: 0,
+        y: 0
+    };
 
-        circle.setAttribute('cx', x);
-        circle.setAttribute('cy', y);
+    var all_dots = [];
 
+    var line = {
+        startX: 0,
+        startY: 0,
+        endX: 0,
+        endY: 0
+    };
 
-    }
+    var bbox = input_div.getBoundingClientRect();
+
 
 
     input_div.addEventListener('mousedown', function(e) {
-
         mouse_down = true;
 
-        console.log('mouse down');
+        update_offset_position(e.clientX, e.clientY);
+
+        line.startX = e.clientX-bbox.left;
+        line.startY = e.clientY-bbox.top;
+
+        draw_dot(svg_box, currentPos.x, currentPos.y, start_color);
+
+        line.startX = e.clientX - bbox.left;
+        line.startY = e.clientY - bbox.top;
+
+
     });
 
     input_div.addEventListener('mouseup', function(e) {
         mouse_down = false;
 
-        console.log('mouse up');
+        update_offset_position(e.clientX, e.clientY);
+
+        line.endX = e.clientX-bbox.left;
+        line.endY = e.clientY-bbox.top;
+
+        var dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
+        dot.id = Date.now();    // use this for tagging
+        dot.setAttributeNS(null, 'r', 10);
+        dot.setAttributeNS(null, 'cx', currentPos.x);
+        dot.setAttributeNS(null, 'cy', currentPos.y);
+        dot.setAttributeNS(null, 'stroke', 'rgba(0,0,0,0)');
+        dot.setAttributeNS(null, 'stroke-width', 0);
+        dot.setAttributeNS(null, 'fill', end_color);
+
+        svg_box.appendChild(dot);
+
+        draw_line(svg_box, line.startX, line.startY, line.endX, line.endY);
+
+        all_dots.push(dot);
+
     });
 
     input_div.addEventListener('mousemove', function(e) {
-
         if (mouse_down) {
-            xPos = e.clientX-input_bbox.left;
-            yPos = e.clientY-input_bbox.top;
-
-            console.log(`${xPos}, ${yPos}`);
-
-            update_ball(xPos, yPos);
-
+            update_offset_position(e.clientX, e.clientY);
+            console.log(`${currentPos.x}, ${currentPos.y}`);
         }
-
     });
 
+    clear_button.addEventListener('click', function(e) {
+        svg_box.innerHTML = '';
+    });
+
+
+    function update_offset_position(x, y) {
+        currentPos.x = x - bbox.left;
+        currentPos.y = y - bbox.top;
+    }
+
+    // main draw-dot function
+    function draw_dot(context, x, y, color) {
+        var dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
+        dot.id = 'ID' + Date.now();    // use this for tagging
+        dot.setAttribute('class', 'highlight_dot');
+        dot.setAttributeNS(null, 'r', 10);
+        dot.setAttributeNS(null, 'cx', currentPos.x);
+        dot.setAttributeNS(null, 'cy', currentPos.y);
+        dot.setAttributeNS(null, 'stroke', 'rgba(0,0,0,0)');
+        dot.setAttributeNS(null, 'stroke-width', 0);
+        dot.setAttributeNS(null, 'fill', color);
+        context.appendChild(dot);
+        all_dots.push(dot);
+    }
+
+    // main draw-line function
+    function draw_line(context, startx, starty, endx, endy) {
+        var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttributeNS(null, 'x1', startx);
+        line.setAttributeNS(null, 'y1', starty);
+        line.setAttributeNS(null, 'x2', endx);
+        line.setAttributeNS(null, 'y2', endy);
+        line.style = 'stroke:' +  line_color + '; stroke-width:2';
+        context.appendChild(line);
+
+    }
 
 
 </script>
