@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Walker 1</title>
+
+    <style>
+        canvas {
+            border: 1px solid black;
+            background: #ddd;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+
+<script>
+
+    var width = 500,
+        height = 500;
+
+    var all_dots = [];
+
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+
+    canvas.width = width;
+    canvas.height = height;
+
+    // constructor
+    var Walker = function(startX, startY, color) {
+        this.color = color;
+        this.x = startX;
+        this.y = startY;
+
+
+        // walk this dot
+        this.walk = function() {
+            var randnum = Math.floor(Math.random() * 4);
+
+            switch (randnum) {
+                case 0:
+                    this.y += 1;
+                    break;
+                case 1:
+                    this.x += 1;
+                    break;
+                case 2:
+                    this.y -= 1;
+                    break;
+                case 3:
+                    this.x -= 1;
+                    break;
+                default:
+                    // should never reach here.
+                    this.x = this.x;
+            }
+
+        };
+
+        // draw this dot
+        this.draw = function() {
+            ctx.save();
+
+            ctx.beginPath();
+            ctx.fillStyle = this.color;
+            ctx.rect(this.x, this.y, 3, 3);
+            ctx.fill();
+
+            ctx.closePath();
+
+            ctx.restore();
+        };
+
+
+        this.register = function() {
+            all_dots.push(this);
+        };
+    };
+
+
+    function global_draw() {
+        all_dots.forEach(function(elem, ind, arr) {
+            elem.walk();
+            elem.draw();
+        });
+
+
+        requestAnimationFrame(global_draw);
+    }
+
+
+
+    window.addEventListener('load', function(e) {
+        console.log('system loaded, spawning and looping. ');
+        //create dots
+        var dot = new Walker(Math.floor(Math.random() * canvas.width), Math.floor(Math.random() * canvas.height), 'rgb(255,0,0)');
+        var dot2 = new Walker(Math.floor(Math.random() * canvas.width), Math.floor(Math.random() * canvas.height), 'rgb(0,0,255)');
+        dot.register();
+        dot2.register();
+
+
+        global_draw();
+    });
+
+
+
+
+
+
+
+</script>
+</body>
+</html>

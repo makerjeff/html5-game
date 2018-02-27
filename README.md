@@ -14,7 +14,7 @@ Required setup for CreateJS:
 - Game Data Class:
     - Use this class in Game.
 - NumberedBox Class:
-    - must explicitely setBounds(x,y,width,height) for each movieclip, otherwise getBounds() will not work.
+    - must explicitly setBounds(x,y,width,height) for each movieclip, otherwise getBounds() will not work.
     - need a [button helper class](https://www.createjs.com/docs/easeljs/classes/ButtonHelper.html) (refer to code and [lynda.com video](https://www.lynda.com/HTML-tutorials/Preparing-your-graphics/597987/603476-4.html?autoplay=true) ) once mouseOver is enabled in the Game class.
 
 - General:
