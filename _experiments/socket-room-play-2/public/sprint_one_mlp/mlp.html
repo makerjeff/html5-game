@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLP</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-size: 16px;
+        }
+
+        html {
+            /*fallthrough*/
+            overflow: hidden;
+        }
+
+        body {
+            /*fallthrough*/
+            overflow: hidden;
+        }
+
+        #container {
+            width: 100vw;
+            height: 100vh;
+            background: black;
+
+            /*catching overflow here*/
+            overflow: auto;
+        }
+
+
+        .section {
+            width: 100vw;
+            height: auto;
+        }
+
+        .masthead {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #masthead1 {
+            background: lightblue;
+        }
+
+
+
+
+
+        /* UTILITY */
+        .spacer_100_50 {
+            width: 100vw;
+            height: 50vh;
+            border: 1px dashed black;
+            background: rgb(230,230,230);
+            padding: 25px;
+        }
+
+        .spacer_100_50:nth-child(odd) {
+            background: rgb(240,240,240);
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 75px;
+
+            font-family: Arial, sans-serif;
+            font-size: 1.5em;
+            text-transform: uppercase;
+
+            background: rgba(255,0,0,0.1);
+        }
+
+        .navigation > .nav_elements {
+            display: inline-block;
+            overflow-x: hidden;
+        }
+
+
+
+        @keyframes enter_right {
+            0% {transform: translate(100vw, 0)}
+            100% {transform: translate(0vw, 0)}
+        }
+
+        @keyframes exit_right {
+            0% {transform: translate(0vw, 0)}
+            100% {transform: translate(100vw, 0)}
+        }
+
+        .anim_enter_right {
+            animation-name: enter_right;
+            animation-duration: 0.75s;
+            animation-iteration-count: 1;
+            animation-timing-function: ease;
+            animation-fill-mode: forwards;
+        }
+
+        .anim_exit_right {
+            animation-name: exit_right;
+            animation-duration: 0.75s;
+            animation-iteration-count: 1;
+            animation-timing-function: ease;
+            animation-fill-mode: forwards;
+
+        }
+
+
+
+    </style>
+</head>
+<body>
+
+<div id="container">
+
+
+    <!--<div id="navigation" class="navigation">-->
+        <!--<div class="nav_elements">overview</div>-->
+    <!--</div>-->
+
+    <div id="section1" class="section">
+
+
+        <div id="masthead1" class="masthead">
+            <h1>overview masthead</h1>
+        </div>
+        <div class="spacer_100_50">overview dummy section 1</div>
+        <div class="spacer_100_50">overview dummy section 2</div>
+        <div class="spacer_100_50">overview dummy section 3</div>
+        <div class="spacer_100_50">overview dummy section 4</div>
+
+    </div>
+
+
+</div>
+
+<script src="./lib/hammer.min.js"></script>
+<script src="./lib/hammer-time.min.js"></script>
+
+<script>
+
+    // --- keep track of page index ---
+
+    var Sections = {
+        titles: ['overview', 'design', 'performance', 'technology', 'gallery', 'bnp', 'inventory'],
+        currentIndex: 0
+    };
+
+    // --- element handles ---
+    var container = document.getElementById('container');
+    var section1 = document.getElementById('section1');
+
+    // --- HAMMER.JS ---
+    var mc = new Hammer.Manager(container, {
+        recognizers: [
+            [Hammer.Swipe, {direction: Hammer.DIRECTION_HORIZONTAL}]
+        ]
+    });
+
+    mc.on('swipe', function(e) {
+        console.log('swiped', e.direction); //2 = back, 4 = forward
+
+        handle_navigation(e.direction);
+    });
+
+
+    // --- helper functions ---
+
+    // TODO: figure out why this is falling through...
+    function handle_navigation(direction) {
+
+        if (direction === 2) {
+
+            console.log('swiped left');
+
+            section1.classList.add('anim_enter_right');
+            section1.addEventListener('animationend', function(e) {
+                console.log('anim_enter_right animation ended, removing');
+                section1.classList.remove('anim_enter_right');
+            });
+        }
+    }
+
+
+    section1.addEventListener('scroll', function(e) {
+        console.log('section1 scrolling... ' + section1.pageYOffset);
+    });
+
+
+
+    // --- events ---
+
+</script>
+
+</body>
+</html>
