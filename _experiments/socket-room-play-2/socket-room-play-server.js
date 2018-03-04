@@ -7,11 +7,17 @@ const io            = require('socket.io')(http);      // socket.io REQUIRED.
 const chalk         = require('chalk');
 const body_parser   = require('body-parser');
 const clear         = require('clear');
+const Canvas        = require('canvas');
+
 const get_lift      = require('./modules/get_lift');
 
 // middleware
 app.use(body_parser.urlencoded({extended: false}));
 app.use(body_parser.json());
+
+// canvas composite
+var canvas = new Canvas(450,350);
+var ctx = canvas.getContext('2d');
 
 
 // client object.
@@ -125,6 +131,14 @@ app.get('/clients', (req, res) => {
     res.send(client_list);
 });
 
+// for composite
+app.get('/composite/:color', function(req, res) {
+
+    console.log(req.params.color);
+    var payload = {status: 'success', payload: {message: 'data successfully requested for: ' + req.params.color, data: canvas_spit(ctx, req.params.color)}};
+    res.json(payload);
+});
+
 // fallthrough
 app.use(express.static('public/'));
 
@@ -150,4 +164,20 @@ function check_room(room) {
         console.log('room found at index ' + index);
         return index;
     }
+}
+
+// spit something out on canvas
+function canvas_spit(context, color) {
+    context.save();
+
+    context.beginPath();
+    context.fillStyle = color || 'black';
+    context.rect(0,0, canvas.width, canvas.height);
+    context.fill();
+    context.closePath();
+    context.restore();
+
+    console.log('returning color: ' + color);
+    // return low quality jpg.
+    return canvas.toDataURL('image/png', 0.2);
 }

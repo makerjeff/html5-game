@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>dot</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            font-family: 'Arial', sans-serif;
+            padding: 0;
+            margin: 0;
+
+            box-sizing: border-box;
+        }
+
+    </style>
+</head>
+<body>
+
+<script>
+
+    var Dot = function(startX, startY, width, color, id) {
+        this.x = startX || canvas.width/2;
+        this.y = startY || canvas.height/2;
+        this.width = width || 5;
+        this.height = height || 5;
+        this.id = id || 'walker-' + Date.now();
+    };
+
+    Dot.prototype.update = function() {
+        // reference
+
+    };
+
+    // game object
+    var Game = function(width, height, id) {
+        this.width = width || 500;
+        this.height = height || 500;
+        this.id = id || 'game-' + Date.now();
+        this.allAgents = [];
+    };
+
+    // initialize game
+    Game.prototype.init = function() {
+        this.canvas = document.createElement('canvas');
+        this.canvas.id = this.id;
+        this.canvas.width = this.width;
+        this.canvas.height = this.height;
+        this.context = this.canvas.getContext('2d');
+
+        document.body.appendChild(this.canvas);
+        this.draw();
+    };
+
+    Game.prototype.update = function() {
+    };
+
+    // draw function (or render)
+    Game.prototype.draw = function() {
+        this.context.save();
+        this.context.fillStyle = '#eee';
+        this.context.rect(0,0, this.canvas.width, this.canvas.height);
+        this.context.fill();
+        this.context.restore();
+
+        // draw all agents
+        this.allAgents.forEach(function(elem, ind, arr) {
+
+        });
+    };
+
+
+
+
+    window.addEventListener('load', function(e) {
+        var game = new Game(375, 667, 'game-canvas');
+        game.init();
+    });
+
+
+
+</script>
+</body>
+</html>

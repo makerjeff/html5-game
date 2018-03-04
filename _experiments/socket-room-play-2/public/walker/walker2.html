@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Walker 2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+
+<script>
+
+    var Walker = function(startX, startY, color, id, speed) {
+        this.x = startX || canvas.width/2;
+        this.y = startY || canvas.height/2;
+        this.id = id || Date.now();
+        this.speed = speed || 1.0;    // units to move, float.
+    };
+
+    // this can be rolled up in the Update.
+    Walker.prototype.walk = function() {
+        var randVector = Math.floor(Math.random() * 5);
+
+        switch (randVector) {
+            case 0:
+                this.y += this.speed;
+                break;
+            case 1:
+                this.x += this.speed;
+                break;
+            case 2:
+                this.y -= this.speed;
+                break;
+            case 3:
+                this.x -= this.speed;
+                break;
+            case 4:
+                // stay in place code
+                break;
+            default:
+                console.log('this should never be seen.');
+        }
+    };
+
+    Walker.prototype.draw = function() {};
+    Walker.prototype.update = function() {};
+    Walker.prototype.register = function() {};
+
+
+    // MAIN GAME CLASS
+    var Game = function(width, height) {
+        this.width = width;
+        this.height = height;
+        this.allAgents = [];    // place to store all agents.
+        this.raf = '';
+        this.currTime = 0;
+        this.prevTime = 0;
+    };
+
+    Game.prototype.initCanvas = function(canvas_id) {
+        this.canvas = document.createElement('canvas');
+        this.canvas.id = canvas_id || 'game-canvas';
+        this.canvas.width = this.width;
+        this.canvas.height = this.height;
+        this.context = this.canvas.getContext('2d');
+
+        this.canvas.style.border = '1px solid black';
+        document.body.appendChild(this.canvas);
+
+        console.log('Canvas with an ID of ' + this.canvas.id + ' was created. ');
+
+        this.render();
+    };
+
+    // update all assets
+    Game.prototype.update = function() {};
+
+    // main game loop
+    Game.prototype.render = function() {
+//        console.log(Date.now());
+
+        this.allAgents.forEach(function(elem, ind, arr) {
+            elem.update();
+        });
+
+        this.raf = requestAnimationFrame(this.render.bind(this));  // has to be bound to 'this'
+    };
+
+    // kill rendering.
+    Game.prototype.stopRender = function(){
+        cancelAnimationFrame(this.raf);
+    };
+
+
+
+    var game = new Game(500,500);
+    game.initCanvas('gameCanvas');
+
+//    game.render();
+
+
+    window.addEventListener('click', function(e) {
+        game.stopRender();
+    });
+
+</script>
+
+</body>
+</html>
