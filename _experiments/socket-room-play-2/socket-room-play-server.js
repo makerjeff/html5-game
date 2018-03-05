@@ -16,7 +16,7 @@ app.use(body_parser.urlencoded({extended: false}));
 app.use(body_parser.json());
 
 // canvas composite
-var canvas = new Canvas(450,350);
+var canvas = new Canvas(640,480);
 var ctx = canvas.getContext('2d');
 
 
@@ -131,9 +131,8 @@ app.get('/clients', (req, res) => {
     res.send(client_list);
 });
 
-// for composite
+// for composite color test
 app.get('/composite/:color', function(req, res) {
-
     console.log(req.params.color);
     var payload = {status: 'success', payload: {message: 'data successfully requested for: ' + req.params.color, data: canvas_spit(ctx, req.params.color)}};
     res.json(payload);
@@ -169,15 +168,13 @@ function check_room(room) {
 // spit something out on canvas
 function canvas_spit(context, color) {
     context.save();
-
     context.beginPath();
     context.fillStyle = color || 'black';
     context.rect(0,0, canvas.width, canvas.height);
     context.fill();
     context.closePath();
     context.restore();
-
     console.log('returning color: ' + color);
     // return low quality jpg.
-    return canvas.toDataURL('image/png', 0.2);
+    return canvas.toDataURL('image/png', 0.1);
 }
