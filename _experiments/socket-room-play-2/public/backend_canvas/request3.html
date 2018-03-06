@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Requester 3</title>
+</head>
+<body>
+
+<form id="requester">
+
+    <select id="sky">
+        <option value="" disabled selected>SKY</option>
+        <option value="opt1">blue</option>
+        <option value="opt2">orange</option>
+        <option value="opt3">pink</option>
+    </select>
+
+    <select id="bg">
+        <option value="" disabled selected>BG</option>
+        <option value="opt1">mountain</option>
+        <option value="opt2">snowy mountain</option>
+    </select>
+
+    <select id="car">
+        <option value="" disabled selected>CAR</option>
+        <option value="opt1">car1</option>
+        <option value="opt2">car2</option>
+    </select>
+
+    <select id="right">
+        <option value="" disabled selected>RIGHT</option>
+        <option value="opt1">blue</option>
+        <option value="opt2">brown</option>
+        <option value="opt3">darkbrown</option>
+        <option value="opt4">green</option>
+        <option value="opt5">red</option>
+        <option value="opt6">yellow</option>
+    </select>
+
+    <select id="left">
+        <option value="" disabled selected>LEFT</option>
+        <option value="opt1">blue</option>
+        <option value="opt2">brown</option>
+        <option value="opt3">darkbrown</option>
+        <option value="opt4">green</option>
+        <option value="opt5">red</option>
+        <option value="opt6">yellow</option>
+    </select>
+
+    <select id="center">
+        <option value="" disabled selected>CENTER</option>
+        <option value="opt1">blue</option>
+        <option value="opt2">brown</option>
+        <option value="opt3">darkbrown</option>
+        <option value="opt4">green</option>
+        <option value="opt5">red</option>
+        <option value="opt6">yellow</option>
+    </select>
+    <button id="request_button"> request </button>
+</form>
+
+<div id="result_div">Data spits out here</div>
+
+<script src="./lib/quickAjax.js"></script>
+
+
+<script>
+    var form = document.getElementById('requester');
+    var result_div = document.getElementById('result_div');
+    var options = form.children;
+
+    form.addEventListener('submit', handle_submit);
+
+    // --- GET COMPOSITE ---
+    function handle_submit(e) {
+        e.preventDefault();
+        console.log('preventing default');
+
+        quick_data_dump(options);
+
+        // quickJax to server
+//        quickJax.get('/comp/'+ input_field.value, function(data) {
+//            create_image(data, result_div);
+//        });
+    }
+
+    // --- HANDLE DOWNLOAD ---
+    function handle_download() {
+        //TODO: click to download.
+        console.log('downloading image...');
+    }
+
+    // --- CREATE IMAGE ---
+    function create_image(data, target_div) {
+        console.log('creating composite image...');
+        var image = new Image();
+        image.src = data.payload.data;
+        image.id = 'image_' + Date.now();
+        image.addEventListener('click', handle_download);
+        target_div.insertBefore(image, target_div.firstChild);
+    }
+
+
+    function quick_data_dump(nodelist) {
+
+        for(var i = 0; i < nodelist.length; i++) {
+
+            console.log(nodelist[i].id);
+        }
+
+    }
+
+</script>
+
+</body>
+</html>

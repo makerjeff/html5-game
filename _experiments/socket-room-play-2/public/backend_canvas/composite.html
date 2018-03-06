@@ -29,44 +29,87 @@
 
     var container = document.getElementById('container');
 
-    var background_src = './sourcefiles/bg-ground.png';
-    var center_src = './sourcefiles/center-darkbrown.png';
-    var left_src = './sourcefiles/left-darkbrown.png';
-    var right_src = './sourcefiles/right-darkbrown.png';
 
-    var canvas = document.createElement('canvas');
-    var ctx = canvas.getContext('2d');
+    // LOADER MODULE
+    var loader = {
+        loaded: true,
+        loaded_count: 0,
+        total_count: 0,
 
-    canvas.width = 640;
-    canvas.height = 480;
+        init: function() {},
 
-    container.appendChild(canvas);
+        load_image: function(url) {
 
-    var bg_img = new Image();
+            console.log('loading image: ' + url);
+            this.total_count++;
+            this.loaded = false;
 
-    bg_img.onload = function() {
-        ctx.save();
-        ctx.drawImage(bg_img, 0,0);
-        ctx.restore();
+            var image = new Image();
+            image.src = url;
+            image.onload = loader.item_loaded;
+            return image;
+        },
 
-        var append_image = new Image();
-        append_image.src = canvas.toDataURL('image/jpeg', 0.8);
+        // called at the end of every file load.
+        item_loaded: function() {
+            loader.loaded_count++;
 
-        container.appendChild(append_image);
+            if (loader.loaded_count === loader.total_count) {
+                //loader has loaded
+                loader.loaded = true;
+
+                // call loader if method exists.
+                if (loader.onload) {
+                    loader.onload();
+                    loader.onload = undefined;
+                }
+            }
+
+
+        },
+
+        onload: function() {
+            console.log('all images loaded.');
+
+            console.log(sky, mountains, ground, center, left, right);
+            draw_canvas();
+        }
     };
 
-    bg_img.src = background_src;
+
+    var sky = loader.load_image('./sourcefiles/bg-sky-blue.png');
+    var mountains = loader.load_image('./sourcefiles/bg-mountain.png');
+    var ground = loader.load_image('./sourcefiles/bg-ground.png');
+
+    var center = loader.load_image('./sourcefiles/center-yellow.png');
+    var left = loader.load_image('./sourcefiles/left-green.png');
+    var right = loader.load_image('./sourcefiles/right-brown.png');
 
 
+    function draw_canvas() {
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+
+        canvas.width = 640;
+        canvas.height = 480;
+
+        ctx.drawImage(sky, 0, 0);
+        ctx.drawImage(mountains, 0, 0);
+        ctx.drawImage(ground, 0, 0);
+        ctx.drawImage(center, 0, 0);
+        ctx.drawImage(left, 0, 0);
+        ctx.drawImage(right, 0, 0);
+
+//        container.appendChild(canvas);
+
+        var img = new Image();
+        img.src = canvas.toDataURL('image/jpeg', 0.9);
+
+        container.appendChild(img);
+
+    }
 
 
-
-
-//    var append_image = document.createElement('img');
-//
-//    append_image.src = canvas.toDataURL('image/jpeg', 0.5);
-//
-//    document.body.appendChild(append_image);
 
 
 

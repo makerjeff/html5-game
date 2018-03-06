@@ -10,6 +10,7 @@ const clear         = require('clear');
 const Canvas        = require('canvas');
 
 const get_lift      = require('./modules/get_lift');
+const create_canvas = require('./modules/create_composite');
 
 // middleware
 app.use(body_parser.urlencoded({extended: false}));
@@ -131,12 +132,35 @@ app.get('/clients', (req, res) => {
     res.send(client_list);
 });
 
+//TODO: wrapped in another module doesn't work, returns base64 with all A's.
 // for composite color test
-app.get('/composite/:color', function(req, res) {
+// app.get('/composite/:color', function(req, res) {
+//     console.log(req.params.color);
+//     var payload = {status: 'success', payload: {message: 'data successfully requested for: ' + req.params.color, data: create_canvas.canvas_spit(ctx, req.params.color)}};
+//     res.json(payload);
+// });
+
+// composite router
+var comp_router = express.Router();
+
+
+//register composite router
+app.use('/comp', comp_router);
+
+
+comp_router.get('/:color', (req, res) => {
     console.log(req.params.color);
-    var payload = {status: 'success', payload: {message: 'data successfully requested for: ' + req.params.color, data: canvas_spit(ctx, req.params.color)}};
+
+    var payload = {status: 'success', payload: {message: 'Data requested for: ' + req.params.color, data: canvas_spit(ctx, req.params.color)}};
     res.json(payload);
 });
+
+// Query string reader
+comp_router.get('/', (req, res) => {
+    var payload = {status: 'success', payload: {data: req.query }};
+    res.json(payload);
+});
+
 
 // fallthrough
 app.use(express.static('public/'));
@@ -178,3 +202,4 @@ function canvas_spit(context, color) {
     // return low quality jpg.
     return canvas.toDataURL('image/png', 0.1);
 }
+

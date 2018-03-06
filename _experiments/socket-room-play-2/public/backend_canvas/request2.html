@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>backend canvas requester</title>
+</head>
+<body>
+
+<form id="requester">
+    <input id="request_field" type="text" autocomplete="off" autofocus>
+    <button id="request_button"> request </button>
+</form>
+
+
+<div id="result_div">Data spits out here</div>
+
+
+<script src="./lib/quickAjax.js"></script>
+<script>
+    var form = document.getElementById('requester');
+    var input_field = document.getElementById('request_field');
+    var result_div = document.getElementById('result_div');
+
+
+    form.addEventListener('submit', get_composite_image);
+
+    function get_composite_image(e) {
+        e.preventDefault();
+        console.log('preventing default');
+
+        quickJax.get('/comp/'+ input_field.value, function(data) {
+
+            console.log('requesting "' + input_field.value + '"');
+
+            var image = new Image();
+            image.src = data.payload.data;
+            image.id = 'image_' + Date.now();
+
+            image.addEventListener('click', handle_download);
+
+            result_div.insertBefore(image, result_div.firstChild);
+        });
+
+        input_field.value = '';
+    }
+
+    function handle_download() {
+        //TODO: click to download.
+    }
+
+</script>
+
+</body>
+</html>
