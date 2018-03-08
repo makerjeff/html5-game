@@ -1,4 +1,5 @@
-// socket-play server 2017.12.29
+// socket-play server 2018.03.06
+// backend composite RnD.
 
 const app           = require('express')();
 const express       = require('express');
@@ -6,6 +7,7 @@ const http          = require('http').Server(app);
 const io            = require('socket.io')(http);      // socket.io REQUIRED.
 const chalk         = require('chalk');
 const body_parser   = require('body-parser');
+const fs            = require('fs');
 const clear         = require('clear');
 const Canvas        = require('canvas');
 
@@ -19,6 +21,9 @@ app.use(body_parser.json());
 // canvas composite
 var canvas = new Canvas(640,480);
 var ctx = canvas.getContext('2d');
+
+// load images when server starts.
+var global_images = load_images();
 
 
 // client object.
@@ -148,18 +153,94 @@ var comp_router = express.Router();
 app.use('/comp', comp_router);
 
 
-comp_router.get('/:color', (req, res) => {
-    console.log(req.params.color);
-
-    var payload = {status: 'success', payload: {message: 'Data requested for: ' + req.params.color, data: canvas_spit(ctx, req.params.color)}};
-    res.json(payload);
-});
+// // TEST ROUTE
+// comp_router.get('/:color', (req, res) => {
+//     console.log(req.params.color);
+//
+//     var payload = {status: 'success', payload: {message: 'Data requested for: ' + req.params.color, data: canvas_spit(ctx, req.params.color)}};
+//     res.json(payload);
+// });
 
 // Query string reader
 comp_router.get('/', (req, res) => {
     var payload = {status: 'success', payload: {data: req.query }};
     res.json(payload);
 });
+
+// BUILD ME AN IMAGE!
+comp_router.get('/image_builder', (req, res) => {
+    var payload = {status: '', payload: {}};
+
+    payload.data = req.query;
+
+    res.json(payload);
+});
+
+// comp_router('/tester', (req, res) => {
+//     // console.log(global_images);
+//     res.send('hi.');
+// });
+
+comp_router.get('/tester', (req, res) => {
+    console.log('hi.');
+    res.send('hi');
+});
+
+function build_image(context, sky, bg, car, left, right, center) {
+    context.save();
+
+    //TODO: continue here.
+}
+
+function load_images() {
+    var img_array = [];
+    var img_src_array = [
+        './sourcefiles/bg-ground.png',
+        './sourcefiles/bg-mountain.png',
+        './sourcefiles/bg-mountain-snow.png',
+        './sourcefiles/bg-sky-blue.png',
+        './sourcefiles/bg-sky-orange.png',
+        './sourcefiles/bg-sky-pink.png',
+        './sourcefiles/car-1.png',
+        './sourcefiles/car-2.png',
+        './sourcefiles/center-blue.png',
+        './sourcefiles/center-brown.png',
+        './sourcefiles/center-darkbrown.png',
+        './sourcefiles/center-green.png',
+        './sourcefiles/center-red.png',
+        './sourcefiles/center-yellow.png',
+        './sourcefiles/left-blue.png',
+        './sourcefiles/left-brown.png',
+        './sourcefiles/left-darkbrown.png',
+        './sourcefiles/left-green.png',
+        './sourcefiles/left-red.png',
+        './sourcefiles/left-yellow.png',
+        './sourcefiles/right-blue.png',
+        './sourcefiles/right-brown.png',
+        './sourcefiles/right-darkbrown.png',
+        './sourcefiles/right-green.png',
+        './sourcefiles/right-red.png',
+        './sourcefiles/right-yellow.png'
+    ];
+
+    img_src_array.forEach((elem, ind, arr) => {
+        // console.log(elem);
+
+        // load each file
+        var img = new Canvas.Image();
+        img.src = elem;
+
+        img.onload = function(e) {
+            console.log('image loaded.');
+        };
+
+        img_array.push(img);
+    });
+
+    console.log('all images loaded into global image array.');
+    return img_array;
+
+}
 
 
 // fallthrough
