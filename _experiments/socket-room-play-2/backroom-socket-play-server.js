@@ -149,18 +149,6 @@ app.get('/clients', (req, res) => {
 var comp_router = express.Router();
 
 
-//register composite router
-app.use('/comp', comp_router);
-
-
-// // TEST ROUTE
-// comp_router.get('/:color', (req, res) => {
-//     console.log(req.params.color);
-//
-//     var payload = {status: 'success', payload: {message: 'Data requested for: ' + req.params.color, data: canvas_spit(ctx, req.params.color)}};
-//     res.json(payload);
-// });
-
 // Query string reader
 comp_router.get('/', (req, res) => {
     var payload = {status: 'success', payload: {data: req.query }};
@@ -176,15 +164,13 @@ comp_router.get('/image_builder', (req, res) => {
     res.json(payload);
 });
 
-// comp_router('/tester', (req, res) => {
-//     // console.log(global_images);
-//     res.send('hi.');
-// });
-
 comp_router.get('/tester', (req, res) => {
-    console.log('hi.');
-    res.send('hi');
+    console.log('Server message sent.');
+    res.send(`Server says "Hi!" at ${Date.now()}`);
 });
+
+//register composite router
+app.use('/comp', comp_router);
 
 function build_image(context, sky, bg, car, left, right, center) {
     context.save();
