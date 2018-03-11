@@ -77,8 +77,8 @@ createjs.extend = function(subclass, superclass) {
  * An alias to the super class's constructor is always added in the format `prefix_constructor`.
  * This allows the subclass to call super class methods without using `function.call`, providing better performance.
  *
- * For example, if `MySubClass` extends `MySuperClass`, and both define a `draw` method, then calling `promote(MySubClass, "MySuperClass")`
- * would add a `MySuperClass_constructor` method to MySubClass and promote the `draw` method on `MySuperClass` to the
+ * For example, if `MySubClass` extends `MySuperClass`, and both define a `periodic_draw` method, then calling `promote(MySubClass, "MySuperClass")`
+ * would add a `MySuperClass_constructor` method to MySubClass and promote the `periodic_draw` method on `MySuperClass` to the
  * prototype of `MySubClass` as `MySuperClass_draw`.
  *
  * This should be called after the class's prototype is fully defined.
@@ -3559,8 +3559,8 @@ createjs.deprecate = function(fallbackMethod, name) {
 // constructor:
 	/**
 	 * The Graphics class exposes an easy to use API for generating vector drawing instructions and drawing them to a
-	 * specified context. Note that you can use Graphics without any dependency on the EaselJS framework by calling {{#crossLink "Graphics/draw"}}{{/crossLink}}
-	 * directly, or it can be used with the {{#crossLink "Shape"}}{{/crossLink}} object to draw vector graphics within the
+	 * specified context. Note that you can use Graphics without any dependency on the EaselJS framework by calling {{#crossLink "Graphics/periodic_draw"}}{{/crossLink}}
+	 * directly, or it can be used with the {{#crossLink "Shape"}}{{/crossLink}} object to periodic_draw vector graphics within the
 	 * context of an EaselJS display list.
 	 *
 	 * There are two approaches to working with Graphics object: calling methods on a Graphics instance (the "Graphics API"), or
@@ -3574,7 +3574,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 *      g.drawCircle(0,0,30);
 	 *
 	 * All drawing methods in Graphics return the Graphics instance, so they can be chained together. For example,
-	 * the following line of code would generate the instructions to draw a rectangle with a red stroke and blue fill:
+	 * the following line of code would generate the instructions to periodic_draw a rectangle with a red stroke and blue fill:
 	 *
 	 *      myGraphics.beginStroke("red").beginFill("blue").drawRect(20, 20, 100, 50);
 	 *
@@ -3753,7 +3753,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		this._dirty = false;
 
 		/**
-		 * Index to draw from if a store operation has happened.
+		 * Index to periodic_draw from if a store operation has happened.
 		 * @property _storeIndex
 		 * @protected
 		 * @type {Number}
@@ -3936,11 +3936,11 @@ createjs.deprecate = function(fallbackMethod, name) {
 
 	/**
 	 * Draws the display object into the specified context ignoring its visible, alpha, shadow, and transform.
-	 * Returns true if the draw was handled (useful for overriding functionality).
+	 * Returns true if the periodic_draw was handled (useful for overriding functionality).
 	 *
 	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
-	 * @method draw
-	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
+	 * @method periodic_draw
+	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to periodic_draw into.
 	 * @param {Object} data Optional data that is passed to graphics command exec methods. When called from a Shape instance, the shape passes itself as the data parameter. This can be used by custom graphic commands to insert contextual data.
 	 **/
 	p.draw = function(ctx, data) {
@@ -3953,11 +3953,11 @@ createjs.deprecate = function(fallbackMethod, name) {
 
 	/**
 	 * Draws only the path described for this Graphics instance, skipping any non-path instructions, including fill and
-	 * stroke descriptions. Used for <code>DisplayObject.mask</code> to draw the clipping path, for example.
+	 * stroke descriptions. Used for <code>DisplayObject.mask</code> to periodic_draw the clipping path, for example.
 	 *
 	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
 	 * @method drawAsPath
-	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
+	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to periodic_draw into.
 	 **/
 	p.drawAsPath = function(ctx) {
 		this._updateInstructions();
@@ -3991,8 +3991,8 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#complex-shapes-(paths)">
 	 * whatwg spec</a>.
 	 * @method lineTo
-	 * @param {Number} x The x coordinate the drawing point should draw to.
-	 * @param {Number} y The y coordinate the drawing point should draw to.
+	 * @param {Number} x The x coordinate the drawing point should periodic_draw to.
+	 * @param {Number} y The y coordinate the drawing point should periodic_draw to.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 * @chainable
 	 **/
@@ -4019,7 +4019,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 
 	/**
 	 * Draws an arc defined by the radius, startAngle and endAngle arguments, centered at the position (x, y). For
-	 * example, to draw a full circle with a radius of 20 centered at (100, 100):
+	 * example, to periodic_draw a full circle with a radius of 20 centered at (100, 100):
 	 *
 	 *      arc(100, 100, 20, 0, Math.PI*2);
 	 *
@@ -4107,7 +4107,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 // public methods that roughly map to Adobe Flash/Animate graphics APIs:
 	/**
 	 * Clears all drawing instructions, effectively resetting this Graphics instance. Any line and fill styles will need
-	 * to be redefined to draw shapes following a clear call. A tiny API method "c" also exists.
+	 * to be redefined to periodic_draw shapes following a clear call. A tiny API method "c" also exists.
 	 * @method clear
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 * @chainable
@@ -4142,7 +4142,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * @method beginLinearGradientFill
 	 * @param {Array} colors An array of CSS compatible color values. For example, ["#F00","#00F"] would define a gradient
 	 * drawing from red to blue.
-	 * @param {Array} ratios An array of gradient positions which correspond to the colors. For example, [0.1, 0.9] would draw
+	 * @param {Array} ratios An array of gradient positions which correspond to the colors. For example, [0.1, 0.9] would periodic_draw
 	 * the first color to 10% then interpolating to the second color at 90%.
 	 * @param {Number} x0 The position of the first point defining the line that defines the gradient direction and size.
 	 * @param {Number} y0 The position of the first point defining the line that defines the gradient direction and size.
@@ -4166,7 +4166,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * @param {Array} colors An array of CSS compatible color values. For example, ["#F00","#00F"] would define
 	 * a gradient drawing from red to blue.
 	 * @param {Array} ratios An array of gradient positions which correspond to the colors. For example, [0.1,
-	 * 0.9] would draw the first color to 10% then interpolating to the second color at 90%.
+	 * 0.9] would periodic_draw the first color to 10% then interpolating to the second color at 90%.
 	 * @param {Number} x0 Center position of the inner circle that defines the gradient.
 	 * @param {Number} y0 Center position of the inner circle that defines the gradient.
 	 * @param {Number} r0 Radius of the inner circle that defines the gradient.
@@ -4286,7 +4286,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * @param {Array} colors An array of CSS compatible color values. For example, ["#F00","#00F"] would define
 	 * a gradient drawing from red to blue.
 	 * @param {Array} ratios An array of gradient positions which correspond to the colors. For example, [0.1,
-	 * 0.9] would draw the first color to 10% then interpolating to the second color at 90%.
+	 * 0.9] would periodic_draw the first color to 10% then interpolating to the second color at 90%.
 	 * @param {Number} x0 The position of the first point defining the line that defines the gradient direction and size.
 	 * @param {Number} y0 The position of the first point defining the line that defines the gradient direction and size.
 	 * @param {Number} x1 The position of the second point defining the line that defines the gradient direction and size.
@@ -4311,7 +4311,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * @param {Array} colors An array of CSS compatible color values. For example, ["#F00","#00F"] would define
 	 * a gradient drawing from red to blue.
 	 * @param {Array} ratios An array of gradient positions which correspond to the colors. For example, [0.1,
-	 * 0.9] would draw the first color to 10% then interpolating to the second color at 90%, then draw the second color
+	 * 0.9] would periodic_draw the first color to 10% then interpolating to the second color at 90%, then periodic_draw the second color
 	 * to 100%.
 	 * @param {Number} x0 Center position of the inner circle that defines the gradient.
 	 * @param {Number} y0 Center position of the inner circle that defines the gradient.
@@ -4400,8 +4400,8 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * Draws a rounded rectangle with different corner radii. Supports positive and negative corner radii. A tiny API
 	 * method "rc" also exists.
 	 * @method drawRoundRectComplex
-	 * @param {Number} x The horizontal coordinate to draw the round rect.
-	 * @param {Number} y The vertical coordinate to draw the round rect.
+	 * @param {Number} x The horizontal coordinate to periodic_draw the round rect.
+	 * @param {Number} y The vertical coordinate to periodic_draw the round rect.
 	 * @param {Number} w The width of the round rect.
 	 * @param {Number} h The height of the round rect.
 	 * @param {Number} radiusTL Top left corner radius.
@@ -4463,7 +4463,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 
 	/**
 	 * Draws a star if pointSize is greater than 0, or a regular polygon if pointSize is 0 with the specified number of
-	 * points. For example, the following code will draw a familiar 5 pointed star shape centered at 100, 100 and with a
+	 * points. For example, the following code will periodic_draw a familiar 5 pointed star shape centered at 100, 100 and with a
 	 * radius of 50:
 	 *
 	 *      myGraphics.beginFill("#FF0").drawPolyStar(100, 100, 50, 5, 0.6, -90);
@@ -4476,9 +4476,9 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * @param {Number} y Position of the center of the shape.
 	 * @param {Number} radius The outer radius of the shape.
 	 * @param {Number} sides The number of points on the star or sides on the polygon.
-	 * @param {Number} pointSize The depth or "pointy-ness" of the star points. A pointSize of 0 will draw a regular
-	 * polygon (no points), a pointSize of 1 will draw nothing because the points are infinitely pointy.
-	 * @param {Number} angle The angle of the first point / corner. For example a value of 0 will draw the first point
+	 * @param {Number} pointSize The depth or "pointy-ness" of the star points. A pointSize of 0 will periodic_draw a regular
+	 * polygon (no points), a pointSize of 1 will periodic_draw nothing because the points are infinitely pointy.
+	 * @param {Number} angle The angle of the first point / corner. For example a value of 0 will periodic_draw the first point
 	 * directly to the right of the center.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 * @chainable
@@ -4490,12 +4490,12 @@ createjs.deprecate = function(fallbackMethod, name) {
 	/**
 	 * Appends a graphics command object to the graphics queue. Command objects expose an "exec" method
 	 * that accepts two parameters: the Context2D to operate on, and an arbitrary data object passed into
-	 * {{#crossLink "Graphics/draw"}}{{/crossLink}}. The latter will usually be the Shape instance that called draw.
+	 * {{#crossLink "Graphics/periodic_draw"}}{{/crossLink}}. The latter will usually be the Shape instance that called periodic_draw.
 	 *
 	 * This method is used internally by Graphics methods, such as drawCircle, but can also be used directly to insert
 	 * built-in or custom graphics commands. For example:
 	 *
-	 * 		// attach data to our shape, so we can access it during the draw:
+	 * 		// attach data to our shape, so we can access it during the periodic_draw:
 	 * 		myShape.color = "red";
 	 *
 	 * 		// append a Circle command object:
@@ -4522,9 +4522,9 @@ createjs.deprecate = function(fallbackMethod, name) {
 	};
 
 	/**
-	 * Decodes a compact encoded path string into a series of draw instructions.
+	 * Decodes a compact encoded path string into a series of periodic_draw instructions.
 	 * This format is not intended to be human readable, and is meant for use by authoring tools.
-	 * The format uses a base64 character set, with each character representing 6 bits, to define a series of draw
+	 * The format uses a base64 character set, with each character representing 6 bits, to define a series of periodic_draw
 	 * commands.
 	 *
 	 * Each command is comprised of a single "header" character followed by a variable number of alternating x and y
@@ -4611,9 +4611,9 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * 	// set up cache:
 	 * 	myShape.cache(0,0,500,500,scale);
 	 *
-	 * 	// when the user drags, draw a new line:
+	 * 	// when the user drags, periodic_draw a new line:
 	 * 	myShape.graphics.moveTo(oldX,oldY).lineTo(newX,newY);
-	 * 	// then draw it into the existing cache:
+	 * 	// then periodic_draw it into the existing cache:
 	 * 	myShape.updateCache("source-over");
 	 * 	// store the new line, so it isn't redrawn next time:
 	 * 	myShape.store();
@@ -4638,7 +4638,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 
 	/**
 	 * Unstores any graphics commands that were previously stored using {{#crossLink "Graphics/store"}}{{/crossLink}}
-	 * so that they will be executed in subsequent draw calls.
+	 * so that they will be executed in subsequent periodic_draw calls.
 	 *
 	 * @method unstore
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
@@ -4695,8 +4695,8 @@ createjs.deprecate = function(fallbackMethod, name) {
 	/**
 	 * Shortcut to lineTo.
 	 * @method lt
-	 * @param {Number} x The x coordinate the drawing point should draw to.
-	 * @param {Number} y The y coordinate the drawing point should draw to.
+	 * @param {Number} x The x coordinate the drawing point should periodic_draw to.
+	 * @param {Number} y The y coordinate the drawing point should periodic_draw to.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 * @chainable
 	 * @protected
@@ -4806,7 +4806,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * @method lf
 	 * @param {Array} colors An array of CSS compatible color values. For example, ["#F00","#00F"] would define a gradient
 	 * drawing from red to blue.
-	 * @param {Array} ratios An array of gradient positions which correspond to the colors. For example, [0.1, 0.9] would draw
+	 * @param {Array} ratios An array of gradient positions which correspond to the colors. For example, [0.1, 0.9] would periodic_draw
 	 * the first color to 10% then interpolating to the second color at 90%.
 	 * @param {Number} x0 The position of the first point defining the line that defines the gradient direction and size.
 	 * @param {Number} y0 The position of the first point defining the line that defines the gradient direction and size.
@@ -4824,7 +4824,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * @param {Array} colors An array of CSS compatible color values. For example, ["#F00","#00F"] would define
 	 * a gradient drawing from red to blue.
 	 * @param {Array} ratios An array of gradient positions which correspond to the colors. For example, [0.1,
-	 * 0.9] would draw the first color to 10% then interpolating to the second color at 90%.
+	 * 0.9] would periodic_draw the first color to 10% then interpolating to the second color at 90%.
 	 * @param {Number} x0 Center position of the inner circle that defines the gradient.
 	 * @param {Number} y0 Center position of the inner circle that defines the gradient.
 	 * @param {Number} r0 Radius of the inner circle that defines the gradient.
@@ -4912,7 +4912,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * @param {Array} colors An array of CSS compatible color values. For example, ["#F00","#00F"] would define
 	 * a gradient drawing from red to blue.
 	 * @param {Array} ratios An array of gradient positions which correspond to the colors. For example, [0.1,
-	 * 0.9] would draw the first color to 10% then interpolating to the second color at 90%.
+	 * 0.9] would periodic_draw the first color to 10% then interpolating to the second color at 90%.
 	 * @param {Number} x0 The position of the first point defining the line that defines the gradient direction and size.
 	 * @param {Number} y0 The position of the first point defining the line that defines the gradient direction and size.
 	 * @param {Number} x1 The position of the second point defining the line that defines the gradient direction and size.
@@ -4929,7 +4929,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * @param {Array} colors An array of CSS compatible color values. For example, ["#F00","#00F"] would define
 	 * a gradient drawing from red to blue.
 	 * @param {Array} ratios An array of gradient positions which correspond to the colors. For example, [0.1,
-	 * 0.9] would draw the first color to 10% then interpolating to the second color at 90%, then draw the second color
+	 * 0.9] would periodic_draw the first color to 10% then interpolating to the second color at 90%, then periodic_draw the second color
 	 * to 100%.
 	 * @param {Number} x0 Center position of the inner circle that defines the gradient.
 	 * @param {Number} y0 Center position of the inner circle that defines the gradient.
@@ -4995,8 +4995,8 @@ createjs.deprecate = function(fallbackMethod, name) {
 	/**
 	 * Shortcut to drawRoundRectComplex.
 	 * @method rc
-	 * @param {Number} x The horizontal coordinate to draw the round rect.
-	 * @param {Number} y The vertical coordinate to draw the round rect.
+	 * @param {Number} x The horizontal coordinate to periodic_draw the round rect.
+	 * @param {Number} y The vertical coordinate to periodic_draw the round rect.
 	 * @param {Number} w The width of the round rect.
 	 * @param {Number} h The height of the round rect.
 	 * @param {Number} radiusTL Top left corner radius.
@@ -5044,9 +5044,9 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * @param {Number} y Position of the center of the shape.
 	 * @param {Number} radius The outer radius of the shape.
 	 * @param {Number} sides The number of points on the star or sides on the polygon.
-	 * @param {Number} pointSize The depth or "pointy-ness" of the star points. A pointSize of 0 will draw a regular
-	 * polygon (no points), a pointSize of 1 will draw nothing because the points are infinitely pointy.
-	 * @param {Number} angle The angle of the first point / corner. For example a value of 0 will draw the first point
+	 * @param {Number} pointSize The depth or "pointy-ness" of the star points. A pointSize of 0 will periodic_draw a regular
+	 * polygon (no points), a pointSize of 1 will periodic_draw nothing because the points are infinitely pointy.
+	 * @param {Number} angle The angle of the first point / corner. For example a value of 0 will periodic_draw the first point
 	 * directly to the right of the center.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 * @chainable
@@ -6268,7 +6268,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * @type {Boolean}
 	 * @default false
 	 **/
-	DisplayObject._snapToPixelEnabled = false; // stage.snapToPixelEnabled is temporarily copied here during a draw to provide global access.
+	DisplayObject._snapToPixelEnabled = false; // stage.snapToPixelEnabled is temporarily copied here during a periodic_draw to provide global access.
 
 	/**
 	 * Enum like property for determining StageGL render lookup, i.e. where to expect properties.
@@ -6436,7 +6436,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 
 	/**
 	 * Dispatched on each display object on a stage whenever the stage updates. This occurs immediately before the
-	 * rendering (draw) pass. When {{#crossLink "Stage/update"}}{{/crossLink}} is called, first all display objects on
+	 * rendering (periodic_draw) pass. When {{#crossLink "Stage/update"}}{{/crossLink}} is called, first all display objects on
 	 * the stage dispatch the tick event, then all of the display objects are drawn to stage. Children will have their
 	 * {{#crossLink "tick:event"}}{{/crossLink}} event dispatched in order of their depth prior to the event being
 	 * dispatched on their parent.
@@ -6521,12 +6521,12 @@ createjs.deprecate = function(fallbackMethod, name) {
 
 	/**
 	 * Draws the display object into the specified context ignoring its visible, alpha, shadow, and transform.
-	 * Returns <code>true</code> if the draw was handled (useful for overriding functionality).
+	 * Returns <code>true</code> if the periodic_draw was handled (useful for overriding functionality).
 	 *
 	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
-	 * @method draw
-	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
-	 * @param {Boolean} [ignoreCache=false] Indicates whether the draw operation should ignore any current cache. For example,
+	 * @method periodic_draw
+	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to periodic_draw into.
+	 * @param {Boolean} [ignoreCache=false] Indicates whether the periodic_draw operation should ignore any current cache. For example,
 	 * used for drawing the cache (to prevent it from simply drawing an existing cache back into itself).
 	 * @return {Boolean}
 	 **/
@@ -6540,7 +6540,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 
 	/**
 	 * Applies this display object's transformation, alpha, globalCompositeOperation, clipping path (mask), and shadow
-	 * to the specified context. This is typically called prior to {{#crossLink "DisplayObject/draw"}}{{/crossLink}}.
+	 * to the specified context. This is typically called prior to {{#crossLink "DisplayObject/periodic_draw"}}{{/crossLink}}.
 	 * @method updateContext
 	 * @param {CanvasRenderingContext2D} ctx The canvas 2D to update.
 	 **/
@@ -6619,7 +6619,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * will be drawn over the existing cache using the specified compositeOperation.
 	 *
 	 * <h4>Example</h4>
-	 * Clear the current graphics of a cached shape, draw some new instructions, and then update the cache. The new line
+	 * Clear the current graphics of a cached shape, periodic_draw some new instructions, and then update the cache. The new line
 	 * will be drawn on top of the old one.
 	 *
 	 *      // Not shown: Creating the shape, and caching it.
@@ -6997,7 +6997,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * Mostly used by {{#crossLink "MovieClip"}}{{/crossLink}} and {{#crossLink "BitmapText"}}{{/crossLink}} to
 	 * correct their internal state and children prior to being drawn.
 	 *
-	 * Is manually called via draw in a {{#crossLink "Stage"}}{{/crossLink}} but is automatically called when
+	 * Is manually called via periodic_draw in a {{#crossLink "Stage"}}{{/crossLink}} but is automatically called when
 	 * present in a {{#crossLink "StageGL"}}{{/crossLink}} instance.
 	 *
 	 * @method _updateState
@@ -7265,25 +7265,25 @@ createjs.deprecate = function(fallbackMethod, name) {
 
 	/**
 	 * Draws the display object into the specified context ignoring its visible, alpha, shadow, and transform.
-	 * Returns true if the draw was handled (useful for overriding functionality).
+	 * Returns true if the periodic_draw was handled (useful for overriding functionality).
 	 *
 	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
-	 * @method draw
-	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
-	 * @param {Boolean} [ignoreCache=false] Indicates whether the draw operation should ignore any current cache.
+	 * @method periodic_draw
+	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to periodic_draw into.
+	 * @param {Boolean} [ignoreCache=false] Indicates whether the periodic_draw operation should ignore any current cache.
 	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back
 	 * into itself).
 	 **/
 	p.draw = function(ctx, ignoreCache) {
 		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
 		
-		// this ensures we don't have issues with display list changes that occur during a draw:
+		// this ensures we don't have issues with display list changes that occur during a periodic_draw:
 		var list = this.children.slice();
 		for (var i=0,l=list.length; i<l; i++) {
 			var child = list[i];
 			if (!child.isVisible()) { continue; }
 			
-			// draw the child:
+			// periodic_draw the child:
 			ctx.save();
 			child.updateContext(ctx);
 			child.draw(ctx);
@@ -7732,7 +7732,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		var mtx, ctx = createjs.DisplayObject._hitTestContext;
 		activeListener = activeListener || (mouse&&this._hasMouseEventListener());
 
-		// draw children one at a time, and check if we get a hit:
+		// periodic_draw children one at a time, and check if we get a hit:
 		var children = this.children, l = children.length;
 		for (var i=l-1; i>=0; i--) {
 			var child = children[i];
@@ -7788,7 +7788,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		var ctx = createjs.DisplayObject._hitTestContext;
 		ctx.setTransform(mtx.a,  mtx.b, mtx.c, mtx.d, mtx.tx-x, mtx.ty-y);
 		
-		// draw the mask as a solid fill:
+		// periodic_draw the mask as a solid fill:
 		mask.graphics.drawAsPath(ctx);
 		ctx.fillStyle = "#000";
 		ctx.fill();
@@ -7918,7 +7918,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	
 		/**
 		 * Specifies the area of the stage to affect when calling update. This can be use to selectively
-		 * re-draw specific regions of the canvas. If null, the whole canvas area is drawn.
+		 * re-periodic_draw specific regions of the canvas. If null, the whole canvas area is drawn.
 		 * @property drawRect
 		 * @type {Rectangle}
 		 */
@@ -8086,7 +8086,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 
 	/**
 	 * Dispatched each update immediately before the canvas is cleared and the display list is drawn to it.
-	 * You can call preventDefault on the event object to cancel the draw.
+	 * You can call preventDefault on the event object to cancel the periodic_draw.
 	 * @event drawstart
 	 * @since 0.7.0
 	 */
@@ -8742,7 +8742,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 *  of a canvas object in the current DOM.
 	 * @param {Object} options All the option parameters in a reference object, some are not supported by some browsers.
 	 * @param {Boolean} [options.preserveBuffer=false] If `true`, the canvas is NOT auto-cleared by WebGL (the spec
-	 *  discourages setting this to `true`). This is useful if you want persistent draw effects.
+	 *  discourages setting this to `true`). This is useful if you want persistent periodic_draw effects.
 	 * @param {Boolean} [options.antialias=false] Specifies whether or not the browser's WebGL implementation should try
 	 *  to perform anti-aliasing. This will also enable linear pixel sampling on power-of-two textures (smoother images).
 	 * @param {Boolean} [options.transparent=false] If `true`, the canvas is transparent. This is <strong>very</strong>
@@ -8872,7 +8872,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		this._clearColor = {r: 0.50, g: 0.50, b: 0.50, a: 0.00};
 
 		/**
-		 * The maximum number of cards (aka a single sprite) that can be drawn in one draw call. Use getter/setters to
+		 * The maximum number of cards (aka a single sprite) that can be drawn in one periodic_draw call. Use getter/setters to
 		 * modify otherwise internal buffers may be incorrect sizes.
 		 * @property _maxCardsPerBatch
 		 * @protected
@@ -8882,7 +8882,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		this._maxCardsPerBatch = StageGL.DEFAULT_MAX_BATCH_SIZE;														//TODO: write getter/setters for this
 
 		/**
-		 * The shader program used to draw the current batch.
+		 * The shader program used to periodic_draw the current batch.
 		 * @property _activeShader
 		 * @protected
 		 * @type {WebGLProgram}
@@ -8891,7 +8891,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		this._activeShader = null;
 
 		/**
-		 * The vertex position data for the current draw call.
+		 * The vertex position data for the current periodic_draw call.
 		 * @property _vertices
 		 * @protected
 		 * @type {Float32Array}
@@ -8909,7 +8909,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		this._vertexPositionBuffer = null;
 
 		/**
-		 * The vertex U/V data for the current draw call.
+		 * The vertex U/V data for the current periodic_draw call.
 		 * @property _uvs
 		 * @protected
 		 * @type {Float32Array}
@@ -8927,7 +8927,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		this._uvPositionBuffer = null;
 
 		/**
-		 * The vertex indices data for the current draw call.
+		 * The vertex indices data for the current periodic_draw call.
 		 * @property _indices
 		 * @protected
 		 * @type {Float32Array}
@@ -8945,7 +8945,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		this._textureIndexBuffer = null;
 
 		/**
-		 * The vertices data for the current draw call.
+		 * The vertices data for the current periodic_draw call.
 		 * @property _alphas
 		 * @protected
 		 * @type {Float32Array}
@@ -9022,7 +9022,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 
 		/**
 		 * The current batch being drawn, A batch consists of a call to `drawElements` on the GPU. Many of these calls
-		 * can occur per draw.
+		 * can occur per periodic_draw.
 		 * @property _batchId
 		 * @protected
 		 * @type {Number}
@@ -9031,7 +9031,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		this._batchID = 0;
 
 		/**
-		 * The current draw being performed, may contain multiple batches. Comparing to {{#crossLink "StageGL/_batchID:property"}}{{/crossLink}}
+		 * The current periodic_draw being performed, may contain multiple batches. Comparing to {{#crossLink "StageGL/_batchID:property"}}{{/crossLink}}
 		 * can reveal batching efficiency.
 		 * @property _drawID
 		 * @protected
@@ -9049,7 +9049,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		this._slotBlacklist = [];
 
 		/**
-		 * Used to prevent nested draw calls from accidentally overwriting drawing information by tracking depth.
+		 * Used to prevent nested periodic_draw calls from accidentally overwriting drawing information by tracking depth.
 		 * @property _isDrawing
 		 * @protected
 		 * @type {Number}
@@ -9475,7 +9475,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 // events:
 	/**
 	 * Dispatched each update immediately before the canvas is cleared and the display list is drawn to it. You can call
-	 * {{#crossLink "Event/preventDefault"}}{{/crossLink}} on the event to cancel the draw.
+	 * {{#crossLink "Event/preventDefault"}}{{/crossLink}} on the event to cancel the periodic_draw.
 	 * @event drawstart
 	 */
 
@@ -9622,11 +9622,11 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * don't match the context managed by this StageGL will be treated as a 2D context.
 	 *
 	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
-	 * @method draw
-	 * @param {CanvasRenderingContext2D | WebGLRenderingContext} context The context object to draw into.
-	 * @param {Boolean} [ignoreCache=false] Indicates whether the draw operation should ignore any current cache. For
+	 * @method periodic_draw
+	 * @param {CanvasRenderingContext2D | WebGLRenderingContext} context The context object to periodic_draw into.
+	 * @param {Boolean} [ignoreCache=false] Indicates whether the periodic_draw operation should ignore any current cache. For
 	 *  example, used for drawing the cache (to prevent it from simply drawing an existing cache back into itself).
-	 * @return {Boolean} If the draw was handled by this function
+	 * @return {Boolean} If the periodic_draw was handled by this function
 	 */
 	p.draw = function (context, ignoreCache) {
 		if (context === this._webGLContext && StageGL.isWebGLActive(this._webGLContext)) {
@@ -9647,7 +9647,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back into itself).
 	 * @param {Array} filters The filters we're drawing into cache.
 	 * @param {BitmapCache} manager The BitmapCache instance looking after the cache
-	 * @return {Boolean} If the draw was handled by this function
+	 * @return {Boolean} If the periodic_draw was handled by this function
 	 */
 	p.cacheDraw = function (target, filters, manager) {
 		if (StageGL.isWebGLActive(this._webGLContext)) {
@@ -9662,7 +9662,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	/**
 	 * Blocks, or frees a texture "slot" on the GPU. Can be useful if you are overflowing textures. When overflowing
 	 * textures they are re-uploaded to the GPU every time they're encountered, this can be expensive with large textures.
-	 * By blocking the slot you reduce available slots, potentially increasing draw calls, but mostly you prevent a
+	 * By blocking the slot you reduce available slots, potentially increasing periodic_draw calls, but mostly you prevent a
 	 * texture being re-uploaded if it would have moved slots due to overflow.
 	 *
 	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
@@ -9679,7 +9679,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	};
 
 	/**
-	 * Render textures can't draw into themselves so any item being used for renderTextures needs two to alternate between.
+	 * Render textures can't periodic_draw into themselves so any item being used for renderTextures needs two to alternate between.
 	 * This function creates, gets, and toggles the render surface between the two.
 	 *
 	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
@@ -9790,7 +9790,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 
 	/**
 	 * Similar to {{#crossLink "releaseTexture"}}{{/crossLink}}, but this function differs by searching for textures to
-	 * release. It works by assuming that it can purge any texture which was last used more than "count" draw calls ago.
+	 * release. It works by assuming that it can purge any texture which was last used more than "count" periodic_draw calls ago.
 	 * Because this process is unaware of the objects and whether they may be used on your stage, false positives can
 	 * occur. It is recommended to manually manage your memory with {{#crossLink "StageGL/releaseTexture"}}{{/crossLink}},
 	 * however, there are many use cases where this is simpler and error-free. This process is also run by default under
@@ -9806,7 +9806,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		for (var i= 0; i<l; i++) {
 			var item = dict[i];
 			if (!item) { continue; }
-			if (item._drawID + count <= this._drawID) {	// use draw not batch as draw is more indicative of time
+			if (item._drawID + count <= this._drawID) {	// use periodic_draw not batch as periodic_draw is more indicative of time
 				this._killTextureObject(item);
 			}
 		}
@@ -10008,7 +10008,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	/**
 	 * Common utility function used to apply the correct texture processing parameters for the bound texture.
 	 * @method setTextureParams
-	 * @param  {WebGLRenderingContext} gl The canvas WebGL context object to draw into.
+	 * @param  {WebGLRenderingContext} gl The canvas WebGL context object to periodic_draw into.
 	 * @param  {Boolean} [isPOT=false] Marks whether the texture is "Power of Two", this may allow better quality AA.
 	 */
 	p.setTextureParams = function (gl, isPOT) {
@@ -10119,12 +10119,12 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * filters. Once compiled, shaders are saved so. If the Shader code requires dynamic alterations re-run this function
 	 * to generate a new shader.
 	 * @method _fetchShaderProgram
-	 * @param  {WebGLRenderingContext} gl The canvas WebGL context object to draw into.
+	 * @param  {WebGLRenderingContext} gl The canvas WebGL context object to periodic_draw into.
 	 * @param  {String} [shaderName="regular"] Working values: "regular", "override", and "filter". Which type of shader to build.
 	 * Filter and override both accept the custom params. Regular and override have all features. Filter is a special case reduced feature shader meant to be over-ridden.
-	 * @param  {String} [customVTX] Extra vertex shader information to replace a regular draw, see 
+	 * @param  {String} [customVTX] Extra vertex shader information to replace a regular periodic_draw, see
 	 * {{#crossLink "StageGL/COVER_VERTEX_BODY"}}{{/crossLink}} for default and {{#crossLink "Filter"}}{{/crossLink}} for examples.
-	 * @param  {String} [customFRAG] Extra fragment shader information to replace a regular draw, see 
+	 * @param  {String} [customFRAG] Extra fragment shader information to replace a regular periodic_draw, see
 	 * {{#crossLink "StageGL/COVER_FRAGMENT_BODY"}}{{/crossLink}} for default and {{#crossLink "Filter"}}{{/crossLink}} for examples.
 	 * @param  {Function} [shaderParamSetup] Function to run so custom shader parameters can get applied for the render.
 	 * @protected
@@ -10233,7 +10233,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	/**
 	 * Creates a shader from the specified string replacing templates. Template items are defined via `{{` `key` `}}``.
 	 * @method _createShader
-	 * @param  {WebGLRenderingContext} gl The canvas WebGL context object to draw into.
+	 * @param  {WebGLRenderingContext} gl The canvas WebGL context object to periodic_draw into.
 	 * @param  {Number} type The type of shader to create. gl.VERTEX_SHADER | gl.FRAGMENT_SHADER
 	 * @param  {String} str The definition for the shader.
 	 * @return {WebGLShader}
@@ -10476,9 +10476,9 @@ createjs.deprecate = function(fallbackMethod, name) {
 	};
 
 	/**
-	 * Adds the texture to a spot in the current batch, forcing a draw if no spots are free.
+	 * Adds the texture to a spot in the current batch, forcing a periodic_draw if no spots are free.
 	 * @method _insertTextureInBatch
-	 * @param {WebGLRenderingContext} gl The canvas WebGL context object to draw into.
+	 * @param {WebGLRenderingContext} gl The canvas WebGL context object to periodic_draw into.
 	 * @param {WebGLTexture} texture The texture to be inserted.
 	 * @protected
 	 */
@@ -10604,7 +10604,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	/**
 	 * Begin the drawing process for a regular render.
 	 * @method _batchDraw
-	 * @param {WebGLRenderingContext} gl The canvas WebGL context object to draw into.
+	 * @param {WebGLRenderingContext} gl The canvas WebGL context object to periodic_draw into.
 	 * @param {Stage || Container} sceneGraph {{#crossLink "Container"}}{{/crossLink}} object with all that needs to rendered, preferably a Stage.
 	 * @param {Boolean} ignoreCache
 	 * @protected
@@ -10640,9 +10640,9 @@ createjs.deprecate = function(fallbackMethod, name) {
 		Implicitly there are 4 modes to this function: filtered-sameContext, filtered-uniqueContext, sameContext, uniqueContext.
 		Each situation must be handled slightly differently as 'sameContext' or 'uniqueContext' define how the output works,
 		one drawing directly into the main context and the other drawing into a stored renderTexture respectively.
-		When the draw is a 'filtered' draw, the filters are applied sequentially and will draw into saved textures repeatedly.
+		When the periodic_draw is a 'filtered' periodic_draw, the filters are applied sequentially and will periodic_draw into saved textures repeatedly.
 		Once the final filter is done the final output is treated depending upon whether it is a same or unique context.
-		The internal complexity comes from reducing over-draw, shared code, and issues like textures needing to be flipped
+		The internal complexity comes from reducing over-periodic_draw, shared code, and issues like textures needing to be flipped
 		sometimes when written to render textures.
 		*/
 		var renderTexture;
@@ -10671,7 +10671,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		} else {
 			// is this for another stage or mine?
 			if (this.isCacheControlled) {
-				// draw item to canvas				I -> C
+				// periodic_draw item to canvas				I -> C
 				gl.clear(gl.COLOR_BUFFER_BIT);
 				this._batchDraw(container, gl, true);
 			} else {
@@ -10679,7 +10679,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 				target.cacheCanvas = this.getTargetRenderTexture(target, manager._drawWidth, manager._drawHeight);
 				renderTexture = target.cacheCanvas;
 
-				// draw item to render texture		I -> T
+				// periodic_draw item to render texture		I -> T
 				gl.bindFramebuffer(gl.FRAMEBUFFER, renderTexture._frameBuffer);
 				this.updateViewport(manager._drawWidth, manager._drawHeight);
 				this._projectionMatrix = this._projectionMatrixFlip;
@@ -10719,7 +10719,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		gl.activeTexture(gl.TEXTURE0 + lastTextureSlot);
 		renderTexture = this.getTargetRenderTexture(target, manager._drawWidth, manager._drawHeight);
 
-		// draw item to render texture		I -> T
+		// periodic_draw item to render texture		I -> T
 		gl.bindFramebuffer(gl.FRAMEBUFFER, renderTexture._frameBuffer);
 		this.updateViewport(manager._drawWidth, manager._drawHeight);
 		gl.clear(gl.COLOR_BUFFER_BIT);
@@ -10743,7 +10743,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 			renderTexture = this.getTargetRenderTexture(target, manager._drawWidth, manager._drawHeight);
 			gl.bindFramebuffer(gl.FRAMEBUFFER, renderTexture._frameBuffer);
 
-			// draw result to render texture	R -> T
+			// periodic_draw result to render texture	R -> T
 			gl.viewport(0, 0, manager._drawWidth, manager._drawHeight);
 			gl.clear(gl.COLOR_BUFFER_BIT);
 			this._drawCover(gl, flipY);
@@ -10768,7 +10768,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 			gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 			this.updateViewport(wBackup, hBackup);
 
-			// draw result to canvas			R -> C
+			// periodic_draw result to canvas			R -> C
 			this._activeShader = this.getFilterShader(this);
 			gl.clear(gl.COLOR_BUFFER_BIT);
 			this._drawCover(gl, flipY);
@@ -10787,20 +10787,20 @@ createjs.deprecate = function(fallbackMethod, name) {
 			gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 			this.updateViewport(wBackup, hBackup);
 
-			// make sure the last texture is the active thing to draw
+			// make sure the last texture is the active thing to periodic_draw
 			target.cacheCanvas = renderTexture;
 		}
 	};
 
 	/**
 	 * Add all the contents of a container to the pending buffers, called recursively on each container. This may
-	 * trigger a draw if a buffer runs out of space. This is the main workforce of the render loop.
+	 * trigger a periodic_draw if a buffer runs out of space. This is the main workforce of the render loop.
 	 * @method _appendToBatchGroup
 	 * @param {Container} container The {{#crossLink "Container"}}{{/crossLink}} that contains everything to be drawn.
-	 * @param {WebGLRenderingContext} gl The canvas WebGL context object to draw into.
+	 * @param {WebGLRenderingContext} gl The canvas WebGL context object to periodic_draw into.
 	 * @param {Matrix2D} concatMtx The effective (concatenated) transformation matrix when beginning this container
 	 * @param {Number} concatAlpha The effective (concatenated) alpha when beginning this container
-	 * @param {Boolean} ignoreCache Don't use an element's cache during this draw
+	 * @param {Boolean} ignoreCache Don't use an element's cache during this periodic_draw
 	 * @protected
 	 */
 	p._appendToBatchGroup = function (container, gl, concatMtx, concatAlpha, ignoreCache) {
@@ -10941,7 +10941,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 				subR = rect.width-frame.regX;					subB = rect.height-frame.regY;
 			}
 
-			// These must be calculated here else a forced draw might happen after they're set
+			// These must be calculated here else a forced periodic_draw might happen after they're set
 			var offV1 = this.batchCardCount*StageGL.INDICIES_PER_CARD;		// offset for 1 component vectors
 			var offV2 = offV1*2;											// offset for 2 component vectors
 
@@ -10975,7 +10975,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	/**
 	 * Draws all the currently defined cards in the buffer to the render surface.
 	 * @method _drawBuffers
-	 * @param {WebGLRenderingContext} gl The canvas WebGL context object to draw into.
+	 * @param {WebGLRenderingContext} gl The canvas WebGL context object to periodic_draw into.
 	 * @protected
 	 */
 	p._drawBuffers = function (gl) {
@@ -11024,7 +11024,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	/**
 	 * Draws a card that covers the entire render surface. Mainly used for filters.
 	 * @method _drawBuffers
-	 * @param {WebGLRenderingContext} gl The canvas WebGL context object to draw into.
+	 * @param {WebGLRenderingContext} gl The canvas WebGL context object to periodic_draw into.
 	 * @param {Boolean} flipY Covers are used for things like RenderTextures and because of 3D vs Canvas space this can
 	 * end up meaning the `y` space sometimes requires flipping in the render.
 	 * @protected
@@ -11116,7 +11116,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		}
 	
 		/**
-		 * Specifies an area of the source image to draw. If omitted, the whole image will be drawn.
+		 * Specifies an area of the source image to periodic_draw. If omitted, the whole image will be drawn.
 		 * Notes:
 		 * <ul>
 		 *     <li>that video sources must have a width / height set to work correctly with `sourceRect`</li>
@@ -11162,12 +11162,12 @@ createjs.deprecate = function(fallbackMethod, name) {
 
 	/**
 	 * Draws the display object into the specified context ignoring its visible, alpha, shadow, and transform.
-	 * Returns true if the draw was handled (useful for overriding functionality).
+	 * Returns true if the periodic_draw was handled (useful for overriding functionality).
 	 *
 	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
-	 * @method draw
-	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
-	 * @param {Boolean} [ignoreCache=false] Indicates whether the draw operation should ignore any current cache.
+	 * @method periodic_draw
+	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to periodic_draw into.
+	 * @param {Boolean} [ignoreCache=false] Indicates whether the periodic_draw operation should ignore any current cache.
 	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back
 	 * into itself).
 	 * @return {Boolean}
@@ -11301,7 +11301,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		
 	// public properties:
 		/**
-		 * The frame index that will be drawn when draw is called. Note that with some {{#crossLink "SpriteSheet"}}{{/crossLink}}
+		 * The frame index that will be drawn when periodic_draw is called. Note that with some {{#crossLink "SpriteSheet"}}{{/crossLink}}
 		 * definitions, this will advance non-sequentially. This will always be an integer value.
 		 * @property currentFrame
 		 * @type {Number}
@@ -11449,11 +11449,11 @@ createjs.deprecate = function(fallbackMethod, name) {
 
 	/**
 	 * Draws the display object into the specified context ignoring its visible, alpha, shadow, and transform.
-	 * Returns true if the draw was handled (useful for overriding functionality).
+	 * Returns true if the periodic_draw was handled (useful for overriding functionality).
 	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
-	 * @method draw
-	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
-	 * @param {Boolean} ignoreCache Indicates whether the draw operation should ignore any current cache.
+	 * @method periodic_draw
+	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to periodic_draw into.
+	 * @param {Boolean} ignoreCache Indicates whether the periodic_draw operation should ignore any current cache.
 	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back
 	 * into itself).
 	 **/
@@ -11779,12 +11779,12 @@ createjs.deprecate = function(fallbackMethod, name) {
 
 	/**
 	 * Draws the Shape into the specified context ignoring its visible, alpha, shadow, and transform. Returns true if
-	 * the draw was handled (useful for overriding functionality).
+	 * the periodic_draw was handled (useful for overriding functionality).
 	 *
 	 * <i>NOTE: This method is mainly for internal use, though it may be useful for advanced uses.</i>
-	 * @method draw
-	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
-	 * @param {Boolean} [ignoreCache=false] Indicates whether the draw operation should ignore any current cache. For example,
+	 * @method periodic_draw
+	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to periodic_draw into.
+	 * @param {Boolean} [ignoreCache=false] Indicates whether the periodic_draw operation should ignore any current cache. For example,
 	 * used for drawing the cache (to prevent it from simply drawing an existing cache back into itself).
 	 * @return {Boolean}
 	 **/
@@ -11854,7 +11854,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * @param {String} [text] The text to display.
 	 * @param {String} [font] The font style to use. Any valid value for the CSS font attribute is acceptable (ex. "bold
 	 * 36px Arial").
-	 * @param {String} [color] The color to draw the text in. Any valid value for the CSS color attribute is acceptable (ex.
+	 * @param {String} [color] The color to periodic_draw the text in. Any valid value for the CSS color attribute is acceptable (ex.
 	 * "#F00", "red", or "#FF0000").
 	 **/
 	function Text(text, font, color) {
@@ -11877,7 +11877,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		this.font = font;
 	
 		/**
-		 * The color to draw the text in. Any valid value for the CSS color attribute is acceptable (ex. "#F00"). Default is "#000".
+		 * The color to periodic_draw the text in. Any valid value for the CSS color attribute is acceptable (ex. "#F00"). Default is "#000".
 		 * It will also accept valid canvas fillStyle values.
 		 * @property color
 		 * @type String
@@ -11904,7 +11904,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		this.textBaseline = "top";
 	
 		/**
-		 * The maximum width to draw the text. If maxWidth is specified (not null), the text will be condensed or
+		 * The maximum width to periodic_draw the text. If maxWidth is specified (not null), the text will be condensed or
 		 * shrunk to make it fit in this width. For detailed information view the
 		 * <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#text-styles">
 		 * whatwg spec</a>.
@@ -11987,11 +11987,11 @@ createjs.deprecate = function(fallbackMethod, name) {
 
 	/**
 	 * Draws the Text into the specified context ignoring its visible, alpha, shadow, and transform.
-	 * Returns true if the draw was handled (useful for overriding functionality).
+	 * Returns true if the periodic_draw was handled (useful for overriding functionality).
 	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
-	 * @method draw
-	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
-	 * @param {Boolean} ignoreCache Indicates whether the draw operation should ignore any current cache.
+	 * @method periodic_draw
+	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to periodic_draw into.
+	 * @param {Boolean} ignoreCache Indicates whether the periodic_draw operation should ignore any current cache.
 	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back
 	 * into itself).
 	 **/
@@ -12189,7 +12189,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * @protected
 	 **/
 	p._drawTextLine = function(ctx, text, y) {
-		// Chrome 17 will fail to draw the text if the last param is included but null, so we feed it a large value instead:
+		// Chrome 17 will fail to periodic_draw the text if the last param is included but null, so we feed it a large value instead:
 		if (this.outline) { ctx.strokeText(text, 0, y, this.maxWidth||0xFFFF); }
 		else { ctx.fillText(text, 0, y, this.maxWidth||0xFFFF); }
 	};
@@ -12319,7 +12319,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		 */
 		this._oldStage = null;
 		/**
-		 * The event listener proxy triggered drawing draw for special circumstances.
+		 * The event listener proxy triggered drawing periodic_draw for special circumstances.
 		 * @property _drawAction
 		 * @type function
 		 * @protected
@@ -12330,7 +12330,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 
 // static properties:
 	/**
-	 * BitmapText uses Sprite instances to draw text. To reduce the creation and destruction of instances (and thus garbage collection), it maintains
+	 * BitmapText uses Sprite instances to periodic_draw text. To reduce the creation and destruction of instances (and thus garbage collection), it maintains
 	 * an internal object pool of sprite instances to reuse. Increasing this value can cause more sprites to be
 	 * retained, slightly increasing memory use, but reducing instantiation.
 	 * @property maxPoolSize
@@ -12931,22 +12931,22 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * @return {Boolean} Boolean indicating whether the display object would be visible if drawn to a canvas
 	 **/
 	p.isVisible = function() {
-		// children are placed in draw, so we can't determine if we have content.
+		// children are placed in periodic_draw, so we can't determine if we have content.
 		return !!(this.visible && this.alpha > 0 && this.scaleX != 0 && this.scaleY != 0);
 	};
 
 	/**
 	 * Draws the display object into the specified context ignoring its visible, alpha, shadow, and transform.
-	 * Returns true if the draw was handled (useful for overriding functionality).
+	 * Returns true if the periodic_draw was handled (useful for overriding functionality).
 	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
-	 * @method draw
-	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
-	 * @param {Boolean} ignoreCache Indicates whether the draw operation should ignore any current cache.
+	 * @method periodic_draw
+	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to periodic_draw into.
+	 * @param {Boolean} ignoreCache Indicates whether the periodic_draw operation should ignore any current cache.
 	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back
 	 * into itself).
 	 **/
 	p.draw = function(ctx, ignoreCache) {
-		// draw to cache first:
+		// periodic_draw to cache first:
 		if (this.DisplayObject_draw(ctx, ignoreCache)) { return true; }
 		this._updateState();
 		this.Container_draw(ctx, ignoreCache);
@@ -12996,7 +12996,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	*/
 	p.advance = function(time) {
 		var independent = MovieClip.INDEPENDENT;
-		if (this.mode !== independent) { return; } // update happens in draw for synched clips
+		if (this.mode !== independent) { return; } // update happens in periodic_draw for synched clips
 		
 		// if this MC doesn't have a framerate, hunt ancestors for one:
 		var o=this, fps = o.framerate;
@@ -13603,18 +13603,18 @@ createjs.deprecate = function(fallbackMethod, name) {
 	/**
 	 * Adds a frame to the {{#crossLink "SpriteSheet"}}{{/crossLink}}. Note that the frame will not be drawn until you
 	 * call {{#crossLink "SpriteSheetBuilder/build"}}{{/crossLink}} method. The optional setup params allow you to have
-	 * a function run immediately before the draw occurs. For example, this allows you to add a single source multiple
+	 * a function run immediately before the periodic_draw occurs. For example, this allows you to add a single source multiple
 	 * times, but manipulate it or its children to change it to generate different frames.
 	 *
 	 * Note that the source's transformations (x, y, scale, rotate, alpha) will be ignored, except for regX/Y. To apply
 	 * transforms to a source object and have them captured in the SpriteSheet, simply place it into a {{#crossLink "Container"}}{{/crossLink}}
 	 * and pass in the Container as the source.
 	 * @method addFrame
-	 * @param {DisplayObject} source The source {{#crossLink "DisplayObject"}}{{/crossLink}}  to draw as the frame.
+	 * @param {DisplayObject} source The source {{#crossLink "DisplayObject"}}{{/crossLink}}  to periodic_draw as the frame.
 	 * @param {Rectangle} [sourceRect] A {{#crossLink "Rectangle"}}{{/crossLink}} defining the portion of the
-	 * source to draw to the frame. If not specified, it will look for a `getBounds` method, bounds property, or
+	 * source to periodic_draw to the frame. If not specified, it will look for a `getBounds` method, bounds property, or
 	 * `nominalBounds` property on the source to use. If one is not found, the frame will be skipped.
-	 * @param {Number} [scale=1] Optional. The scale to draw this frame at. Default is 1.
+	 * @param {Number} [scale=1] Optional. The scale to periodic_draw this frame at. Default is 1.
 	 * @param {Function} [setupFunction] A function to call immediately before drawing this frame. It will be called with two parameters: the source, and setupData.
 	 * @param {Object} [setupData] Arbitrary setup data to pass to setupFunction as the second parameter.
 	 * @return {Number} The index of the frame that was just added, or null if a sourceRect could not be determined.
@@ -13657,10 +13657,10 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * @method addMovieClip
 	 * @param {MovieClip} source The source MovieClip instance to add to the SpriteSheet.
 	 * @param {Rectangle} [sourceRect] A {{#crossLink "Rectangle"}}{{/crossLink}} defining the portion of the source to
-	 * draw to the frame. If not specified, it will look for a {{#crossLink "DisplayObject/getBounds"}}{{/crossLink}}
+	 * periodic_draw to the frame. If not specified, it will look for a {{#crossLink "DisplayObject/getBounds"}}{{/crossLink}}
 	 * method, `frameBounds` Array, `bounds` property, or `nominalBounds` property on the source to use. If one is not
 	 * found, the MovieClip will be skipped.
-	 * @param {Number} [scale=1] The scale to draw the movie clip at.
+	 * @param {Number} [scale=1] The scale to periodic_draw the movie clip at.
 	 * @param {Function} [setupFunction] A function to call immediately before drawing each frame. It will be called
 	 * with three parameters: the source, setupData, and the frame index.
 	 * @param {Object} [setupData] Arbitrary setup data to pass to setupFunction as the second parameter.
@@ -13902,7 +13902,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	/**
 	 * @method _drawNext
 	 * @protected
-	 * @return Boolean Returns false if this is the last draw.
+	 * @return Boolean Returns false if this is the last periodic_draw.
 	 **/
 	p._drawNext = function() {
 		var frame = this._frames[this._index];
@@ -13918,7 +13918,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		ctx.clip();
 		ctx.translate(Math.ceil(rect.x-sourceRect.x*sc), Math.ceil(rect.y-sourceRect.y*sc));
 		ctx.scale(sc,sc);
-		frame.source.draw(ctx); // display object will draw itself.
+		frame.source.draw(ctx); // display object will periodic_draw itself.
 		ctx.restore();
 		return (++this._index) < this._frames.length;
 	};
@@ -13964,7 +13964,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 *      }
 	 *
 	 * <strong>Important:</strong> This class needs to be notified it is about to be drawn, this will happen automatically
-	 * if you call stage.update, calling stage.draw or disabling tickEnabled will miss important steps and it will render
+	 * if you call stage.update, calling stage.periodic_draw or disabling tickEnabled will miss important steps and it will render
 	 * stale information.
 	 *
 	 * @class DOMElement
@@ -14008,7 +14008,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		 */
 		this._oldStage = null;
 		/**
-		 * The event listener proxy triggered drawing draw for special circumstances.
+		 * The event listener proxy triggered drawing periodic_draw for special circumstances.
 		 * @property _drawAction
 		 * @type function
 		 * @protected
@@ -14035,17 +14035,17 @@ createjs.deprecate = function(fallbackMethod, name) {
 
 	/**
 	 * Draws the display object into the specified context ignoring its visible, alpha, shadow, and transform.
-	 * Returns true if the draw was handled (useful for overriding functionality).
+	 * Returns true if the periodic_draw was handled (useful for overriding functionality).
 	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
-	 * @method draw
-	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to draw into.
-	 * @param {Boolean} ignoreCache Indicates whether the draw operation should ignore any current cache.
+	 * @method periodic_draw
+	 * @param {CanvasRenderingContext2D} ctx The canvas 2D context object to periodic_draw into.
+	 * @param {Boolean} ignoreCache Indicates whether the periodic_draw operation should ignore any current cache.
 	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back
 	 * into itself).
 	 * @return {Boolean}
 	 */
 	p.draw = function(ctx, ignoreCache) {
-		// this relies on the _tick method because draw isn't called if the parent is not visible.
+		// this relies on the _tick method because periodic_draw isn't called if the parent is not visible.
 		// the actual update happens in _handleDrawEnd
 		return true;
 	};
@@ -14233,7 +14233,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 **/
 	function Filter() {
 		/**
-		 * A flag stating that this filter uses a context draw mode and cannot be batched into imageData processing.
+		 * A flag stating that this filter uses a context periodic_draw mode and cannot be batched into imageData processing.
 		 * @property usesContext
 		 * @type {boolean}
 		 * @default false
@@ -14300,9 +14300,9 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * @param {Number} y The y position to use for the source rect.
 	 * @param {Number} width The width to use for the source rect.
 	 * @param {Number} height The height to use for the source rect.
-	 * @param {CanvasRenderingContext2D} [targetCtx] The 2D context to draw the result to. Defaults to the context passed to ctx.
-	 * @param {Number} [targetX] The x position to draw the result to. Defaults to the value passed to x.
-	 * @param {Number} [targetY] The y position to draw the result to. Defaults to the value passed to y.
+	 * @param {CanvasRenderingContext2D} [targetCtx] The 2D context to periodic_draw the result to. Defaults to the context passed to ctx.
+	 * @param {Number} [targetX] The x position to periodic_draw the result to. Defaults to the value passed to x.
+	 * @param {Number} [targetY] The y position to periodic_draw the result to. Defaults to the value passed to y.
 	 * @return {Boolean} If the filter was applied successfully.
 	 **/
 	p.applyFilter = function(ctx, x, y, width, height, targetCtx, targetX, targetY) {
@@ -14578,7 +14578,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * is that this avoids the slowdown of copying the texture back and forth from the GPU to a Canvas element.
 	 * This means "stage" is the recommended option when available.
 	 *
-	 * A StageGL cache does not infer the ability to draw objects a StageGL cannot currently draw, i.e. do not use a
+	 * A StageGL cache does not infer the ability to periodic_draw objects a StageGL cannot currently periodic_draw, i.e. do not use a
 	 * WebGL context cache when caching a Shape, Text, etc.
 	 * <h4>WebGL cache with a 2D context</h4>
 	 *
@@ -14635,7 +14635,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 
 	/**
 	 * Directly called via {{#crossLink "DisplayObject/updateCache:method"}}{{/crossLink}}, but also internally. This
-	 * has the dual responsibility of making sure the surface is ready to be drawn to, and performing the draw. For
+	 * has the dual responsibility of making sure the surface is ready to be drawn to, and performing the periodic_draw. For
 	 * full details of each behaviour, check the protected functions {{#crossLink "BitmapCache/_updateSurface"}}{{/crossLink}}
 	 * and {{#crossLink "BitmapCache/_drawToCache"}}{{/crossLink}} respectively.
 	 * @method update
@@ -14711,9 +14711,9 @@ createjs.deprecate = function(fallbackMethod, name) {
 
 	/**
 	 * Use context2D drawing commands to display the cache canvas being used.
-	 * @method draw
-	 * @param {CanvasRenderingContext2D} ctx The context to draw into.
-	 * @return {Boolean} Whether the draw was handled successfully.
+	 * @method periodic_draw
+	 * @param {CanvasRenderingContext2D} ctx The context to periodic_draw into.
+	 * @return {Boolean} Whether the periodic_draw was handled successfully.
 	 **/
 	p.draw = function(ctx) {
 		if(!this.target) { return false; }
@@ -14726,7 +14726,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 
 // private methods:
 	/**
-	 * Create or resize the invisible canvas/surface that is needed for the display object(s) to draw to,
+	 * Create or resize the invisible canvas/surface that is needed for the display object(s) to periodic_draw to,
 	 * and in turn be used in their stead when drawing. The surface is resized to the size defined
 	 * by the width and height, factoring in scaling and filters. Adjust them to adjust the output size.
 	 * @method _updateSurface
@@ -14796,7 +14796,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	};
 
 	/**
-	 * Perform the cache draw out for context 2D now that the setup properties have been performed.
+	 * Perform the cache periodic_draw out for context 2D now that the setup properties have been performed.
 	 * @method _drawToCache
 	 * @protected
 	 **/
@@ -15582,9 +15582,9 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 * @param {Number} y The y position to use for the source rect.
 	 * @param {Number} width The width to use for the source rect.
 	 * @param {Number} height The height to use for the source rect.
-	 * @param {CanvasRenderingContext2D} [targetCtx] NOT SUPPORTED IN THIS FILTER. The 2D context to draw the result to. Defaults to the context passed to ctx.
-	 * @param {Number} [targetX] NOT SUPPORTED IN THIS FILTER. The x position to draw the result to. Defaults to the value passed to x.
-	 * @param {Number} [targetY] NOT SUPPORTED IN THIS FILTER. The y position to draw the result to. Defaults to the value passed to y.
+	 * @param {CanvasRenderingContext2D} [targetCtx] NOT SUPPORTED IN THIS FILTER. The 2D context to periodic_draw the result to. Defaults to the context passed to ctx.
+	 * @param {Number} [targetX] NOT SUPPORTED IN THIS FILTER. The x position to periodic_draw the result to. Defaults to the value passed to x.
+	 * @param {Number} [targetY] NOT SUPPORTED IN THIS FILTER. The y position to periodic_draw the result to. Defaults to the value passed to y.
 	 * @return {Boolean} If the filter was applied successfully.
 	 **/
 	p.applyFilter = function (ctx, x, y, width, height, targetCtx, targetX, targetY) {
@@ -15596,7 +15596,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 		targetCtx.save();
 		if (ctx != targetCtx) {
 			// TODO: support targetCtx and targetX/Y
-			// clearRect, then draw the ctx in?
+			// clearRect, then periodic_draw the ctx in?
 			return false;
 		}
 
@@ -30222,7 +30222,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 *
 	 * Each path needs pre-computation to ensure there's fast performance. Because of the pre-computation there's no
 	 * built in support for path changes mid tween. These are the Guide Object's properties:<UL>
-	 * 		<LI> path: Required, Array : The x/y points used to draw the path with a moveTo and 1 to n curveTo calls.</LI>
+	 * 		<LI> path: Required, Array : The x/y points used to periodic_draw the path with a moveTo and 1 to n curveTo calls.</LI>
 	 * 		<LI> start: Optional, 0-1 : Initial position, default 0 except for when continuing along the same path.</LI>
 	 * 		<LI> end: Optional, 0-1 : Final position, default 1 if not specified.</LI>
 	 * 		<LI> orient: Optional, string : "fixed"/"auto"/"cw"/"ccw"<UL>
@@ -30387,7 +30387,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 	 *
 	 * NOTE: you will need to transform your context 2D to the local space of the guide if you wish to line it up.
 	 * @param {Object} guideData All the information describing the guide to be followed.
-	 * @param {DrawingContext2D} [ctx=undefined] The context to draw the object into.
+	 * @param {DrawingContext2D} [ctx=undefined] The context to periodic_draw the object into.
 	 * @param {Array} [higlight=undefined] Array of ratio positions to highlight
 	 * @returns {undefined|String}
 	 */
@@ -30462,7 +30462,7 @@ createjs.deprecate = function(fallbackMethod, name) {
 			}
 		}
 
-		// end draw
+		// end periodic_draw
 		ctx.restore();
 
 		return err;

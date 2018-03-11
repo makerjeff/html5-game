@@ -61,7 +61,7 @@
         this.y += (this.targetY-this.y) / this.speed;
     };
 
-    // ... then draw the ball
+    // ... then periodic_draw the ball
     Ball.prototype.render = function() {
         ctx.fillStyle = this.color;
         ctx.beginPath();

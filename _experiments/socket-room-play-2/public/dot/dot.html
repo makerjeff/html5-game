@@ -56,7 +56,7 @@
     Game.prototype.update = function() {
     };
 
-    // draw function (or render)
+    // periodic_draw function (or render)
     Game.prototype.draw = function() {
         this.context.save();
         this.context.fillStyle = '#eee';
@@ -64,7 +64,7 @@
         this.context.fill();
         this.context.restore();
 
-        // draw all agents
+        // periodic_draw all agents
         this.allAgents.forEach(function(elem, ind, arr) {
 
         });

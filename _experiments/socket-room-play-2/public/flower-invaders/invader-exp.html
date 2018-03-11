@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>invader exp 1</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="game-canvas"></canvas>
+
+<script>
+    var width = 600;
+    var height = 400;
+    var canvas = document.getElementById('game-canvas');
+    var ctx = canvas.getContext('2d');
+
+    var player = {
+        x: width/2,
+        y: height/2,
+        width: 10,
+        height: 10,
+        speed: 3,
+        velX: 0,
+        velY: 0
+    };
+
+    var keysDown = {};
+
+    var friction = 0.9;
+//    var gravity = 0;
+
+    canvas.width = width;
+    canvas.height = height;
+
+
+    function update() {
+        // get user input
+        if (keysDown[39]) {
+            if (player.velX < player.speed) {
+                player.velX++;
+            }
+        }
+
+        if (keysDown[37]) {
+            if (player.velX > -player.speed) {
+                player.velX--;
+            }
+        }
+
+        if (keysDown[38]) {
+            if (player.velY < player.speed) {
+                player.velY--;
+            }
+        }
+
+        if (keysDown[40]) {
+            if (player.velY > -player.speed) {
+                player.velY++;
+            }
+        }
+
+        // apply physics
+        player.velX *= friction;
+        player.velY *= friction;
+//        player.velY += gravity;
+
+        // adjust based on velocity
+        player.x += player.velX;
+        player.y += player.velY;
+
+        // todo: wall checks
+        // todo: floor check
+
+
+
+        // todo: draw character function
+        ctx.clearRect(0,0,width,height);
+        ctx.fillStyle = 'red';
+        ctx.fillRect(player.x, player.y, player.width, player.height);
+
+        ctx.font = '20px Arial';
+        ctx.fillText(player.velX + ', ' + player.velY, 10, 50);
+
+        requestAnimationFrame(update);
+    }
+
+
+    window.addEventListener('load', function(e) {
+        update();
+    });
+
+    window.addEventListener('keydown', function(e) {
+        keysDown[e.keyCode] = true;
+    });
+
+    window.addEventListener('keyup', function(e) {
+        delete keysDown[e.keyCode];
+    });
+
+
+</script>
+</body>
+</html>

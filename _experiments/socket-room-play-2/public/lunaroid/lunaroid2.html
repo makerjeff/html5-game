@@ -97,14 +97,14 @@
 
     Ship.prototype.render = function() {
 
-        // draw circle
+        // periodic_draw circle
         ctx.fillStyle = this.color;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.closePath();
         ctx.fill();
 
-        // draw direction line
+        // periodic_draw direction line
         ctx.strokeStyle = 'rgb(0,0,255)';
         ctx.beginPath();
         ctx.moveTo(this.x, this.y);

@@ -186,7 +186,7 @@
         currentPos.y = y - bbox.top;
     }
 
-    // main draw-dot function
+    // main periodic_draw-dot function
     function draw_dot(context, x, y, color) {
         var dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
         dot.id = 'ID' + Date.now();    // use this for tagging
@@ -201,7 +201,7 @@
         all_dots.push(dot);
     }
 
-    // main draw-line function
+    // main periodic_draw-line function
     function draw_line(context, startx, starty, endx, endy) {
         var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
         line.setAttributeNS(null, 'x1', startx);

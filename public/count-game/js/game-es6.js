@@ -86,7 +86,7 @@ class Game {
         // createjs.Ticker.setFPS(60); //old
         createjs.Ticker.framerate = 60;
 
-        // manually draw to stage on every tick (manual control of animation)
+        // manually periodic_draw to stage on every tick (manual control of animation)
         createjs.Ticker.on('tick', this.stage);
 
         // debug
