@@ -31,7 +31,7 @@
 
     var keysDown = {};
 
-    var friction = 0.9;
+    var friction = 0.89;
 //    var gravity = 0;
 
     canvas.width = width;
@@ -74,7 +74,19 @@
         player.y += player.velY;
 
         // todo: wall checks
-        // todo: floor check
+        if (player.x >= width - player.width) {
+            player.x = width - player.width;
+        }
+        else if (player.x <= 0) {
+            player.x = 0;
+        }
+        // todo: floor / ceiling check
+        if (player.y >= height - player.height) {
+            player.y = height - player.height;
+        }
+        else if (player.y <= 0) {
+            player.y = 0;
+        }
 
 
 
