@@ -9,37 +9,22 @@
     <!--<link rel="stylesheet" href="./css/style.css">-->
     <link rel="stylesheet" href="./css/base.css">
     <link rel="stylesheet" href="./css/nav.css">
+    <link rel="stylesheet" href="./css/helpers.css">
+    <link rel="stylesheet" href="./css/section1.css">
 
+    <!-- TESTER STYLES -->
     <style>
 
 
-
-
-        /* === HELPERS === */
-        .spacer_100_100 {
-            width: 100%;
-            height: 100vh;
-            /*min-height: 100%;*/
-        }
-        .spacer_100_100:nth-child(odd) {
-            background: rgba(0,0,0,0.1);
-        }
-        .spacer_100_50 {
-            width: 100%;
-            height: 50vh;
-        }
-        .spacer_100_50:nth-child(odd) {
-            background: rgba(0,0,0,0.1);
-        }
     </style>
 </head>
 <body>
 
 <div class="container">
 
+    <!-- NAV COMPONENT -->
     <nav id="top_nav" class="nav">
         <div id="logo" class="clickable"><h2>LOGOTA</h2></div>
-
         <!-- horizontal subnav -->
         <div id="subnav" class="horizontal_subnav">
             <div class="clickable">select vehicle</div>
@@ -48,11 +33,30 @@
             <div class="clickable">build & price</div>
             <div class="clickable">local specials</div>
         </div>
-
         <div id="menu" class="clickable"><h3>MENU</h3></div>
     </nav>
 
+    <!-- MAIN BODY -->
     <main>
+
+        <section id="section1">
+            <div class="text_container">
+                <h1>A Great Site</h1>
+                <p>Profound subtitle that makes you want to buy stuff.</p>
+
+
+                    <form id="form" name="form" class="form" action="/">
+
+                        <input id="input_text" class="input_text" type="text" autocomplete="off" placeholder="search">
+                        <button id="submit_button" class="btn">search</button>
+
+                    </form>
+
+            </div>
+
+        </section>
+
+
         <div class="spacer_100_100"></div>
         <div class="spacer_100_100"></div>
 
