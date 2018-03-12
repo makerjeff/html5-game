@@ -1,0 +1,53 @@
+/* NAV.CSS */
+/* ========== NAV ========== */
+.nav {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 5em;
+    width: 100%;
+    padding: 15px 25px;
+    color: white;
+    background: #ff0058;
+}
+.nav > div > h2 {
+    font-size: 1.75em;
+}
+.nav > div > h3 {
+    font-size: 1.3em;
+}
+
+/* --- HORIZONTAL SUBNAV ---*/
+.horizontal_subnav {
+    /*display: flex;*/
+    flex-direction: row;
+    justify-content: flex-end;
+    padding: 0 25px;
+    width: 80%;
+
+    /*default*/
+    display: none;
+    visibility: hidden;
+}
+.horizontal_subnav > div {
+    margin: 0 15px;
+}
+
+/* ======== NAV BREAKPOINTS ========== */
+
+/* roughly 880px */
+@media only screen and (min-width: 55em) {
+    .horizontal_subnav {
+        display: flex;
+        visibility: visible;
+        padding: 0 0;
+        width: 100%;
+    }
+    #menu {
+        display: none;
+        visibility: hidden;
+    }
+}
+
