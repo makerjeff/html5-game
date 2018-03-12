@@ -16,10 +16,40 @@
 
     <!-- TEMP STYLES -->
     <style>
+
+        #stats_display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+
+            position: fixed;
+            background: rgba(255,255,255,0.5);
+
+            padding: 5px 15px;
+            top: 0;
+            right: 0;
+
+            width: auto;
+            height: 1.5em;
+
+            border-radius: 0;
+
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+
+            cursor: pointer;
+
+            z-index: 10;
+
+        }
     </style>
 </head>
 <body>
 
+<div id="stats_display"> 0000x000</div>
+
+<!-- OUTER CONTAINER -->
 <div class="container">
 
     <!-- NAV COMPONENT -->
@@ -39,11 +69,13 @@
     <!-- MAIN BODY -->
     <main>
 
-        <!-- SECTION 1 -->
+        <!-- SECTION 1 MODULE -->
         <section id="section1">
             <div class="text_container">
                 <h1>A Great Site</h1>
                 <p>Profound subtitle that makes you want to buy stuff.</p>
+
+                <!-- FORM COMPONENT -->
                 <form id="form" name="form" class="form" action="/">
                     <input id="input_text" class="input_text" type="text" autocomplete="off" placeholder="search">
                     <button id="submit_button" class="btn">search</button>
@@ -51,7 +83,7 @@
             </div>
         </section>
 
-        <!-- SECTION 2 -->
+        <!-- SECTION 2 MODULE -->
         <section id="section2">
             <h2>Section 2 Title</h2>
             <div class="text_container--sub">
@@ -84,11 +116,49 @@
         <div class="spacer_100_50"></div>
         <div class="spacer_100_50"></div>
     </main>
-
-
-
-
 </div>
+
+<script>
+
+    // --- globals ---
+
+    // SINGLETON
+    var Stats = {
+        is_open: true,
+
+        toggle_stats_display: function() {
+
+            console.log(Stats.is_open);
+
+            if (Stats.is_open) {
+                display_div.style.transform = 'translateX(85%)';
+                Stats.is_open = false;
+            } else {
+                display_div.style.transform = 'translateX(0)';
+                Stats.is_open = true;
+            }
+        }
+    };
+
+    var display_div = document.getElementById('stats_display');
+
+
+    // --- events ---
+    window.addEventListener('load', update_stats);
+    window.addEventListener('resize', update_stats);
+
+    display_div.addEventListener('click', Stats.toggle_stats_display);
+
+    // --- functions ---
+    function update_stats() {
+        display_div.innerHTML = window.innerWidth + ' x ' + window.innerHeight;
+    }
+
+    function toggle_stats_display() {
+
+    }
+
+</script>
 
 </body>
 </html>
