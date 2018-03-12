@@ -1,0 +1,27 @@
+/* FORMS.CSS */
+
+.form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+
+    width: 100%;
+    padding: 25px 0;
+}
+
+.input_text {
+    border: 3px solid #aaa;
+    width: 75%;
+    height: 3em;
+    padding: 0 25px;
+}
+.input_text::placeholder {
+    color: #aaa;
+}
+.btn {
+    border: 0;
+    width: 22%;
+    height: 3em;
+    background: #ff0058;
+    color: white;
+}
