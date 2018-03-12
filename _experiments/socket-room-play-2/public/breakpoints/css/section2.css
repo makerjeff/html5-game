@@ -1,0 +1,62 @@
+#section2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    flex-direction: column;
+
+    width: 100%;
+    /*height: 100vh;*/
+    height: auto;
+    min-height: 25em;  /* iPhone height */
+
+    background: white;
+
+    padding: 35px 0;
+}
+
+#section2 > h2 {
+    font-size: 1.75em;
+}
+
+.text_container--sub {
+    display: flex;
+    /*flex-direction: column;*/
+    flex-direction: row;
+
+    justify-content: center;
+
+    /* switch */
+    flex-wrap: wrap;
+
+    align-items: center;
+    width: 75%;
+    max-width: 768px;
+    color: #333;
+    /*text-shadow: 2px 2px 2px rgba(0,0,0,0.3);*/
+}
+
+.text_container--sub__block {
+    width: 50%;
+    /*flex-basis: 25%;*/
+    padding: 15px 25px;
+}
+
+.text_container--sub > .text_container--sub__block > h3 {
+    font-size: 1.2em;
+    padding: 15px 0;
+}
+/* section 2 media query */
+@media only screen and (max-width: 768px) {
+
+    .text_container--sub {
+        flex-direction: column;
+        flex-wrap: nowrap;
+    }
+
+    .text_container--sub__block {
+        width: 100%;
+        padding: 15px 0;
+    }
+
+}
