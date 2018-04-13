@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>relative</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            font-size: 16px;
+
+            box-sizing: border-box;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 2em;
+        }
+
+        #main_container {
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            /*width: 1200px;*/
+            /*width: 100vw;*/
+            width: 20em;
+            /*max-width: 75em;*/
+            height: 100%;
+
+            /*width: 100%;*/
+
+            background: rgba(255,0,0,0.1);
+
+        }
+
+
+        @media only screen and (min-width: 768px) {
+            /* mobile overrides here */
+
+            #main_container {
+                background: rgba(0,255,0,0.1);
+            }
+
+            * {
+                font-size: 1.35rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="main_container">
+
+    <h1>I am a Heading</h1>
+    <p>I am some body content.</p>
+
+    <div id="inner_container"></div>
+</div>
+
+</body>
+</html>

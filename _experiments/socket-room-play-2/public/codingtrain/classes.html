@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>es6 classes</title>
+    <style>
+        canvas {
+            background: black;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 640;
+    canvas.height = 480;
+    document.body.appendChild(canvas);
+    canvas.style.border = '1px solid black';
+
+    let framerate = 18;
+    let then = Date.now();
+    let now;
+    let interval = 1000/framerate;
+
+
+    // Bubble class
+    class Bubble {
+        constructor(x, y, diameter) {
+            // setup
+            this.x = x;
+            this.y = y;
+            this.diameter = diameter;
+        }
+
+        move() {
+
+            if (Math.random() > 0.5) {
+                this.x = this.x + Math.random() * 2;
+            } else {
+                this.x = this.x - Math.random() * 2;
+            }
+
+            if (Math.random() > 0.5) {
+                this.y = this.y + Math.random() * 2;
+            } else {
+                this.y = this.y - Math.random() * 2;
+            }
+        }
+
+        show() {
+            ctx.beginPath();  // hide to show link line;
+//            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.strokeStyle = 'white';
+            ctx.strokeWidth = 0.2;
+            ctx.arc(this.x, this.y, this.diameter, 0, Math.PI*2, true);
+            ctx.stroke();
+        }
+    }
+
+    class BubbleMaker {
+        constructor() {}
+
+        create(num) {
+            for (let i = 0; i < num; i++) {
+                let bubble = new Bubble(
+                    Math.floor(Math.random() * canvas.width - 10),
+                    Math.floor(Math.random() * canvas.height - 10),
+                    Math.floor(Math.random() * 10)
+                );
+
+                allBubbles.push(bubble);
+            }
+        }
+    }
+
+    let allBubbles = [];
+
+
+    function main_loop() {
+
+
+
+        now = Date.now();
+        if (now - then >= interval) {
+
+            // do stuff in here.
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            allBubbles.forEach((elem) => {
+                elem.move();
+                elem.show();
+            });
+
+
+            then = now;
+        }
+
+        requestAnimationFrame(main_loop);
+    }
+
+    window.addEventListener('load', function(e) {
+
+        let bubbleMaker = new BubbleMaker();
+        bubbleMaker.create(400);
+
+        allBubbles.forEach((elem, ind, arr) => {
+            console.log(`Bubble at position ${ind} has x of ${elem.x} and y of ${elem.y}`);
+        });
+
+        main_loop();
+    });
+
+
+
+</script>
+
+</body>
+</html>

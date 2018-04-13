@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>platformer 3</title>
+    <style>
+        canvas {
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="gamecanvas"></canvas>
+
+
+<script>
+    let canvas = document.getElementById('gamecanvas'),
+        ctx = canvas.getContext('2d');
+
+    let width = 500, height = 200;
+
+    let player = {
+        x: width/2,
+        y: height - 10,
+        width: 10,
+        height: 10,
+        velX: 0,
+        velY: 0,
+        speed: 3,
+        jumping: false
+    };
+
+    let keysDown = {};
+
+    let friction = 0.8,
+        gravity = 0.2;
+
+    canvas.width = width;
+    canvas.height = height;
+
+    // --- UPDATE ---
+    // move the player
+    function update() {
+
+        // assess player input
+        if (38 in keysDown || 32 in keysDown) {
+            if (!player.jumping) {
+                player.jumping = true;
+                player.velY = -player.speed * 2;
+            }
+        }
+
+        if (39 in keysDown) {
+
+            // right
+            if (player.velX < player.speed) {
+                player.velX++;
+            }
+        }
+
+        if (37 in keysDown) {
+
+            // left
+            if (player.velX > -player.speed) {
+                player.velX--;
+            }
+
+        }
+
+        // player position update
+        player.velX *= friction;
+        player.velY += gravity;
+
+        player.x += player.velX;
+        player.y += player.velY;
+
+        // ground check
+        if (player.y >= height - player.height) {
+            player.y = height - player.height;
+            player.jumping = false;
+        }
+
+    }
+
+
+    // --- DRAW ---
+    // paint stuff to canvas.
+
+    function draw() {
+        // draw the Player
+        ctx.clearRect(0,0,width, height);
+        ctx.fillStyle = 'red';
+        ctx.fillRect(player.x, player.y, player.width, player.height);
+    }
+
+
+    // --- MAIN LOOP ---
+    function loop() {
+        update();
+        draw();
+        requestAnimationFrame(loop);
+    }
+
+
+    // --- EVENTS ---
+    window.addEventListener('keydown', function(e) {
+        keysDown[e.keyCode] = true;
+
+    }, false);
+
+    window.addEventListener('keyup', function(e) {
+        delete keysDown[e.keyCode];
+    }, false);
+
+    window.addEventListener('load', function(e) {
+        loop();
+    });
+</script>
+
+</body>
+</html>

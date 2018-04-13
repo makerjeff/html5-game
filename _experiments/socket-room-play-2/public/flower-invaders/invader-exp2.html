@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>invader exp 2</title>
+
+    <style>
+        canvas {
+            border: 1px solid black;
+            background: gray;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="game-canvas"></canvas>
+
+<script>
+    (function() {
+        var width = 160;    //160
+        var height = 144;   //644
+        var canvas = document.getElementById('game-canvas');
+        var ctx = canvas.getContext('2d');
+
+
+        var player = {
+            x: width/2,
+            y: height/2,
+            width: 10,
+            height: 10,
+            speed: 3,
+            velX: 0,
+            velY: 0
+        };
+
+        var keysDown = {};
+
+        var world = {
+            friction: 0.89,
+            gravity: 0
+        };
+
+        function init() {
+            canvas.width = width;
+            canvas.height = height;
+            ctx.imageSmoothingEnabled = false;
+        }
+
+        function update() {
+
+            // key input
+            if (keysDown[39]) {
+                if (player.velX < player.speed) {
+                    player.velX++;
+                }
+            }
+
+            if (keysDown[37]) {
+                if (player.velX < player.speed) {
+                    player.velX--;
+                }
+            }
+
+            if (keysDown[38]) {
+                if (player.velY < player.speed) {
+                    player.velY--;
+                }
+            }
+
+            if (keysDown[40]) {
+                if (player.velY > -player.speed) {
+                    player.velY++;
+                }
+            }
+
+            // apply phystics
+            player.velX *= world.friction;
+            player.velY *= world.friction;
+
+            // move based on velocity
+            player.x += player.velX;
+            player.y += player.velY;
+
+
+            // draw character
+            ctx.clearRect(0,0,width, height);
+            ctx.fillStyle = 'red';
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+
+            requestAnimationFrame(update);
+
+        }
+
+
+
+
+
+        window.addEventListener('load', function(e) {
+            console.log('All thangs loaded, yo. ');
+
+            init();
+
+            // start animation
+            update();
+        });
+
+        window.addEventListener('keydown', function(e) {
+            keysDown[e.keyCode] = true;
+        });
+
+        window.addEventListener('keyup', function(e) {
+            delete keysDown[e.keyCode];
+        });
+
+
+
+
+    })();
+
+
+</script>
+
+</body>
+</html>
