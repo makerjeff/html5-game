@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>panning background</title>
+    <style>
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: transparent;
+        }
+
+        #background {
+            z-index: -2;
+        }
+
+        #main {
+            z-index: -1;
+        }
+
+        #ship {
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="background" width="600" height="360">
+    If you can read this, your browser sucks.
+</canvas>
+
+<!-- canvas for all enemy ships and bullets -->
+<canvas id="main" width="600" height="360">blarg</canvas>
+
+<!-- canvas for the ship (can only move 1/4 up the screen -->
+<canvas id="ship" width="600" height="360">blarg</canvas>
+
+<script src="./js/space_shooter_part_two.js"></script>
+
+</body>
+</html>
