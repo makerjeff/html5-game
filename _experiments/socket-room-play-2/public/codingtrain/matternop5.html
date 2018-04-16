@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>matter no p5</title>
+
+    <style>
+        canvas {
+            background: #333333;
+            box-sizing: border-box;
+            border: 1px solid blue;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="gamecanvas">canvas not supported.</canvas>
+<script src="./lib/matter.js"></script>
+<script src="./js/box_nop5.js"></script>
+
+<script>
+    let framerate = 60;
+    let then = Date.now();
+    let now;
+    let interval = 1000/framerate;
+
+    let width = 640,
+        height = 480;
+
+    let canvas = document.getElementById('gamecanvas');
+    let ctx = canvas.getContext('2d');
+    let bbox = canvas.getBoundingClientRect();
+
+    canvas.width = width;
+    canvas.height = height;
+
+    let Engine = Matter.Engine,
+        //Render = Matter.Render,
+        World = Matter.World,
+        Bodies = Matter.Bodies;
+
+    let boxes = [];
+
+    let engine,
+        world,
+        ground;
+
+
+    /**
+     * Main Loop Function
+     */
+    function main_loop() {
+
+        now = Date.now();
+        if (now - then >= interval) {
+
+            // console.log('loop: continuously running! ' + Date.now());
+
+            ctx.clearRect(0,0,width, height);
+            Engine.update(engine);  //update engine
+
+            ctx.save();
+
+            ctx.fillStyle = 'red';
+            ctx.rect(width/2, height-10, 640, 30);
+            ctx.fill();
+            ctx.restore();
+
+            boxes.forEach((elem)=> {
+                elem.show();
+            });
+
+            then = now;
+        }
+        requestAnimationFrame(main_loop);
+    }
+
+    /**
+     * Setup Function
+     */
+    function setup() {
+        console.log('setup: running once! ' + Date.now());
+
+        engine = Engine.create();
+        world = engine.world;
+        ground = Bodies.rectangle(width/2, height - 10, 640, 30, {isStatic: true });
+
+        World.add(world, [ground]);
+
+        main_loop();
+    }
+
+
+    // ---
+    window.addEventListener('load', function(e) {
+        setup();
+    });
+
+    window.addEventListener('click', function(e) {
+
+        let mouseX = (e.clientX - bbox.left);
+        let mouseY = (e.clientY - bbox.top);
+        // console.log(`${mouseX}, ${mouseY}`);
+
+        // create new box
+        boxes.push(new Box(mouseX, mouseY, 20, 20));
+
+    });
+
+
+</script>
+
+</body>
+</html>
