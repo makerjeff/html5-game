@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>practice 01</title>
+    <style>
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: transparent;
+
+            box-sizing: border-box;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="background" width="600" height="360">
+    If you can read this, your browser sucks.
+</canvas>
+
+<script>
+    // image repo singleton
+    var imageRepo = new function() {
+        this.background = new Image();
+
+        // check to see if background is loaded.
+        this.background.onload = function(e) {
+            console.log(`${this.src} has loaded.`);
+        };
+
+        this.background.src = './imgs/bg.png';
+    };
+
+    // Base Object
+    function Drawable() {
+
+        // constructor-ish function
+        this.init = function(x, y) {
+            this.x = x;
+            this.y = y;
+        };
+
+        this.speed = 0;
+        this.canvasWidth = 0;
+        this.canvasHeight = 0;
+
+        // define "abstract function" to implement in child objects
+        this.draw = function() {};
+    }
+
+    // Background Object
+    function Background() {
+    }
+
+
+
+
+    // --- EVENTS ---
+    window.addEventListener('load', function(e) {
+        console.log('Yay! All thangs are loaded.');
+    });
+
+    window.addEventListener('DOMContentLoaded', function(e) {
+        console.log('Err-thang parsed, ready to start rendering. ');
+    });
+
+</script>
+
+</body>
+</html>

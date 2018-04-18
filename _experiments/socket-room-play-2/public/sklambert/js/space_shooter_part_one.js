@@ -21,7 +21,7 @@ function Drawable() {
         // default vars
         this.x = x;
         this.y = y;
-    }
+    };
 
     this.speed = 0;
     this.canvasWidth = 0;
