@@ -369,7 +369,6 @@ function Game() {
 function animate() {
     requestAnimationFrame(animate);
     game.background.draw();
-
     game.ship.move();
     game.ship.bulletPool.animate();
 }
