@@ -22,22 +22,19 @@
 </canvas>
 
 <script>
-    // image repo singleton
-    var imageRepo = new function() {
+
+    let imageRepository = new function() {
+        //define images
         this.background = new Image();
 
-        // check to see if background is loaded.
-        this.background.onload = function(e) {
-            console.log(`${this.src} has loaded.`);
+        this.background.onload = function() {
+            console.log(`${this.src} has loaded. `);
         };
 
         this.background.src = './imgs/bg.png';
     };
 
-    // Base Object
     function Drawable() {
-
-        // constructor-ish function
         this.init = function(x, y) {
             this.x = x;
             this.y = y;
@@ -47,20 +44,86 @@
         this.canvasWidth = 0;
         this.canvasHeight = 0;
 
-        // define "abstract function" to implement in child objects
-        this.draw = function() {};
+        // abstract function
+        this.draw = function() {
+            // placeholder to be assigned by instances.
+        };
     }
 
-    // Background Object
     function Background() {
+        this.speed = 1; //re-define speed of the background for panning
+
+        // implement abstract function
+        this.draw = function() {
+
+            // pan background
+            this.y += this.speed;
+            this.context.drawImage(imageRepository.background, this.x, this.y);
+
+            // draw another image at the top edge of the first image
+            this.context.drawImage(imageRepository.background, this.x, this.y - this.canvasHeight);
+
+            // if the image scrolled off screen, reset
+            if (this.y >= this.canvasHeight) {
+                this.y = 0;
+            }
+        };
     }
 
+    // set Background object to inherit from Drawable
+    Background.prototype = new Drawable();
+
+    // --- MAIN GAME OBJECT ---
+    function Game() {
+        // houses canvas info and sets up game objects.
+        this.init = function() {
+            this.bgCanvas = document.getElementById('background');
+
+            if (this.bgCanvas.getContext) {
+                this.bgContext = this.bgCanvas.getContext('2d');
+
+                //initialize objects to contain context + canvas info.
+                Background.prototype.context = this.bgContext;
+                Background.prototype.canvasWidth = this.bgCanvas.width;
+                Background.prototype.canvasHeight = this.bgCanvas.height;
+
+                // create bg object
+                this.background = new Background();
+
+                this.background.init(0,0);
+                return true;
+            } else {
+                return false;
+            }
+        };
+
+        this.start = function() {
+            animate();
+        };
+    }
+
+    // THE ANIMATION LOOP: Has to be Global, cannot be within an object.
+    function animate() {
+        requestAnimationFrame(animate);
+        game.background.draw();
+    }
+
+
+    var game = new Game();
+
+    function init () {
+        if (game.init()) {
+            game.start();
+        }
+    }
 
 
 
     // --- EVENTS ---
     window.addEventListener('load', function(e) {
         console.log('Yay! All thangs are loaded.');
+
+        init();
     });
 
     window.addEventListener('DOMContentLoaded', function(e) {

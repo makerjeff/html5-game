@@ -17,7 +17,6 @@ var imageRepository = new function() {
     // load check
     function imageLoaded() {
         numLoaded++;
-
         if (numLoaded === numImages) {
             init();
         }
@@ -90,6 +89,11 @@ function Background() {
 
 // Set Background to inherit properties from Drawable (TODO: Note: this is a new pattern!
 Background.prototype = new Drawable();
+
+
+// tutorial 2 main objects here
+
+
 
 /**
  * Creates the Game object which will hold all objects and data

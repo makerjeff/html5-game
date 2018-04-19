@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>loader play</title>
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        #outer_div {
+
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            width: 100vh;
+            height: 200px;
+        }
+
+        #color_bar {
+            background:
+        }
+    </style>
+</head>
+<body>
+
+<div id="outer_div">
+    <div id="color_bar"></div>
+</div>
+
+<script src="./js/img_data.js"></script>
+<script>
+
+    let Loader = {
+
+        assets: [],
+        total: 0,
+        loaded: null,
+        loadImage: function(img_src){
+            this.total++;
+
+            let img = new Image();
+            img.src = img_src;
+
+            img.onload = function() {
+
+                Loader.imageLoaded();
+
+                console.log(Loader.total, Loader.loaded);
+                console.log(img.src + ' loaded.');
+
+            };
+
+            //return img;
+            this.assets.push({name: img.src, data: img});
+        },
+
+        imageLoaded: function() {
+
+            Loader.loaded++;
+            if (Loader.total === Loader.loaded ) {
+                console.log('All images loaded. ');
+            }
+        },
+
+        onload: function() {
+            console.log('Everything loaded.');
+        }
+    };
+
+
+    window.addEventListener('load', function(e) {
+        imageFileNames.forEach((elem, ind, arr) => {
+            Loader.loadImage('./imgs/sourcefiles/' + elem);
+        });
+    });
+
+</script>
+
+</body>
+</html>
