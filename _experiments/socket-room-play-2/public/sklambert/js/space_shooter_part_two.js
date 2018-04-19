@@ -151,6 +151,156 @@ function Pool(maxSize) {
     };
 }
 
+/**
+ * Creates the Bullet object which the ship fires. The bullest are
+ * drawn on the "main" canvas
+ */
+
+function Bullet() {
+    this.alive = false; // true if bullet is in use.
+
+    // sets bullet values
+    this.spawn = function(x, y, speed) {
+        this.x = x;
+        this.y = y;
+        this.speed = speed;
+        this.alive = true;
+    };
+
+    /**
+     * Uses a 'dirty rectangle' to erase the bullet and moves it.
+     * Returns true if the bullet moved off the screen, indicating it's
+     * ready to cleared by the pool, otherwise draws the bullet.
+     */
+    this.draw = function() {
+        this.context.clearRect(this.x, this.y, this.width, this.height);
+        this.y -= this.speed;   //in-line 'update' essentially
+
+        if (this.y <= 0 - this.height) {
+            return true;
+        } else {
+            this.context.drawImage(imageRepository.bullet, this.x, this.y);
+        }
+    };
+
+    /**
+     * Resets the bullet values
+     */
+    this.clear = function() {
+        this.x = 0;
+        this.y = 0;
+        this.speed = 0;
+        this.alive = false;
+    };
+}
+
+Bullet.prototype = new Drawable();  // learn this pattern for inheritance.
+
+
+/**
+ * Create the Ship object that the player controls. The ship is drawn on
+ * the "ship" canvas and uses dirty rectangles to move around the screen.
+ */
+
+function Ship() {
+    this.speed = 3;
+    this.bulletPool = new Pool(30);
+    this.bulletPool.init();
+    var fireRate = 15;
+    var counter = 0;
+
+    this.draw = function() {
+        this.context.drawImage(imageRepository.spaceship, this.x, this.y);
+    };
+
+    this.move = function() {
+        counter++;
+
+        // determine if the action is a move action.
+        if (KEY_STATUS.left || KEY_STATUS.right || KEY_STATUS.down || KEY_STATUS.up) {
+            // The ship moved, so erase its current image so it can
+            // be redrawn in its new location.
+            this.context.clearRect(this.x, this.y, this.width, this.height);
+
+            // Update x and y according to direction to move and redraw ship.
+            // Change the else-if's to if statements to have diagonal movement.
+
+            if (KEY_STATUS.left) {
+                this.x -= this.speed;
+
+                if (this.x <= 0) {
+                    this.x = 0;
+                }
+                else if (KEY_STATUS.right) {
+                    this.x += this.speed;
+
+                    if (this.x >= this.canvasWidth - this.width) {
+                        this.x = this.canvasWidth - this.width;
+                    }
+                }
+                else if (KEY_STATUS.up) {
+                    this.y -= this.speed;
+
+                    if (this.y <= this.canvasHeight/4 * 3) {
+                        this.y = this.canvasHeight/4 * 3;
+                    }
+                }
+                else if (KEY_STATUS.down) {
+                    this.y += this.speed;
+
+                    if (this.y >= this.canvasHeight - this.height) {
+                        this.y = this.canvasHeight - this.height;
+                    }
+                }
+
+                // finish by redrawing the ship
+                this.draw();
+            }
+
+            if (KEY_STATUS.space && counter >= fireRate) {
+                this.fire();
+                counter = 0;
+            }
+        }
+    };
+
+    this.fire = function() {
+        this.bulletPool.getTwo(this.x + 6, this.y, 3, this.x + 33, this.y, 3);
+    };
+}
+
+Ship.prototype = new Drawable();
+
+// The keycodes that will be mapped when a user presses a button.
+// Original code by Doug McInnes
+var KEY_CODES = {
+    32: 'space',
+    37: 'left',
+    38: 'up',
+    39: 'right',
+    40: 'down'
+};
+
+var KEY_STATUS = {};
+
+for (code in KEY_CODES) {
+    KEY_STATUS[KEY_CODES[code]] = false;
+}
+
+/**
+ * Sets up the document to listen to onkeydown events (fired when
+ * any key on the keyboard is pressed down). When a key is pressed,
+ * it sets the appropriate direction to true to let us know which
+ * key it was.
+ */
+window.addEventListener('keydown', function(e) {
+    var keyCode = (e.keyCode) ? e.keyCode : e.charCode;
+
+    if (KEY_CODES[keyCode]) {
+        e.preventDefault();
+        KEY_STATUS[KEY_CODES[keyCode]] = false;
+    }
+});
 
 
 /**
@@ -168,20 +318,37 @@ function Game() {
     this.init = function() {
         // get the canvas
         this.bgCanvas = document.getElementById('background');
+        this.shipCanvas = document.getElementById('ship');
+        this.mainCanvas = document.getElementById('main');
 
         // canvas support test
         if (this.bgCanvas.getContext) {
             this.bgContext = this.bgCanvas.getContext('2d');
+            this.shipContext = this.shipCanvas.getContext('2d');
+            this.mainContext = this.mainCanvas.getContext('2d');
 
             // initialize objects to contain their context and canvas info.
             Background.prototype.context = this.bgContext;
             Background.prototype.canvasWidth = this.bgCanvas.width;
             Background.prototype.canvasHeight = this.bgCanvas.height;
+            Ship.prototype.context = this.shipContext;
+            Ship.prototype.canvasWidth = this.shipCanvas.width;
+            Ship.prototype.canvasHeight = this.shipCanvas.height;
+            Bullet.prototype.context = this.mainContext;
+            Bullet.prototype.canvasWidth = this.mainCanvas.width;
+            Bullet.prototype.canvasHeight = this.mainCanvas.height;
 
-            // initialize bg object
+            // Initialize the background object
             this.background = new Background();
+            this.background.init(0,0);  // set the drawing point to 0,0
 
-            this.background.init(0,0);
+            // initialize ship object
+            this.ship = new Ship();
+            // Set the ship to start near the buttom middle of the canvas.
+            var shipStartX = this.shipCanvas.width/2 - imageRepository.spaceship.width;
+            var shipStartY = this.shipCanvas.height/4 * 3 + imageRepository.spaceship.height * 2;
+            this.ship.init(shipStartX, shipStartY, imageRepository.spaceship.width, imageRepository.spaceship.height);
+
             return true;
         } else {
             return false;
@@ -202,6 +369,9 @@ function Game() {
 function animate() {
     requestAnimationFrame(animate);
     game.background.draw();
+
+    game.ship.move();
+    game.ship.bulletPool.animate();
 }
 
 /**
