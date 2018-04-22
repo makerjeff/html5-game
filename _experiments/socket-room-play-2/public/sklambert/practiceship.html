@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Practice Ship</title>
+    <style>
+        canvas {
+            background: transparent;
+        }
+
+    </style>
+</head>
+<body>
+<canvas id="background_canvas" width="640" height="480">blarg</canvas>
+<canvas id="main_canvas" width="640" height="480">blarg</canvas>
+
+<script>
+    var background_canvas = document.getElementById('background_canvas');
+    var main_canvas = document.getElementById('main_canvas');
+
+
+    // background Object
+
+    function Background() {
+        // TODO: draw background.
+    }
+
+
+    // ship object
+    function Ship(x, y, speed) {
+        this.context = main_canvas.getContext('2d');
+        this.x = x;
+        this.y = y;
+        this.graphic = undefined;
+
+        this.init = function() {
+            console.log('ship created!');
+            this.context.fillRect(this.x, this.y, 50, 50);  //size, pull from images.
+        };
+
+
+        this.draw = function() {
+
+        };
+    }
+
+
+    function update() {
+
+    }
+
+
+    function animate() {
+
+        update();
+        requestAnimationFrame(animate);
+    }
+
+
+
+
+    window.addEventListener('load', function(e) {
+
+    });
+
+
+</script>
+
+</body>
+</html>

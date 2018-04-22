@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>image loader</title>
+</head>
+<body>
+
+<canvas id="gamecanvas" width="640" height="480"></canvas>
+
+<script>
+    let image_loader = {
+        loaded: true,
+        loaded_images: 0,
+        total_images: 0,
+
+        load: function(url) {
+            this.total_images++;
+            this.loaded = false;
+
+            let image = new Image();
+            image.src = url;
+            image.onload = function() {
+                image_loader.loaded_images++;
+
+                if (image_loader.loaded_images === image_loader.total_images) {
+                    image_loader.loaded = true;
+                }
+            };
+
+            return image;
+        }
+
+    };
+</script>
+
+</body>
+</html>
