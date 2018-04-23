@@ -16,6 +16,7 @@ let game = {
         // Initialize Objects
         levels.init();
         loader.init();
+        mouse.init();
 
         // hide all game layers and display start screen
         $('.game_view').hide();
@@ -51,8 +52,80 @@ let game = {
         game.animation_frame = requestAnimationFrame(game.animate, game.canvas);
     },
 
+    // --- jeffnote: finite-statemachine stuff.
+    // maximum panning speed per frame in pixels.
+    max_speed: 3,
+    min_offset: 0,
+    max_offset: 300,
+
+    // current panning offset
+    offset_left: 0,
+    // score
+    score: 0,
+
+    // Pan the screen to the center on 'new_center' jeffnote: magical formula
+    pan_to: function(new_center) {
+
+        if (Math.abs(new_center.offset_left - game.canvas.width/4) > 0
+            && game.offset_left <= game.max_offset
+            && game.offset_left >= game.min_offset) {
+
+            let deltaX = Math.round((new_center - game.offset_left - game.canvas.width/4) / 2);
+
+            if (deltaX && Math.abs(deltaX) > game.max_speed) {
+                deltaX = game.max_speed * Math.abs(deltaX) / (deltaX);
+            }
+            game.offset_left += deltaX;
+        } else {
+            return true;
+        }
+
+        if (game.offset_left < game.min_offset) {
+            game.offset_left = game.min_offset;
+            return true;
+        }
+        else if (game.offset_left > game.max_offset) {
+            game.offset_left = game.max_offset;
+            return true;
+        }
+
+        return false;
+    },
+
+    //jeffnote: finite state machine action.
     handle_panning: function() {
-        game.offset_left++;
+        // game.offset_left++;
+
+        if (game.mode == 'intro') {
+            if (game.pan_to(700)) {
+                game.mode = 'load-next-hero';
+            }
+        }
+
+        if (game.mode == 'waiting-for-firing') {
+            if (mouse.dragging) {
+                game.pan_to(mouse.x + game.offset_left);
+            } else {
+                game.pan_to(game.slingshot_x);
+            }
+        }
+
+        if (game.mode == 'load-next-hero') {
+            //TODO:
+            // check if any villains are alive, if not, end the level (success/win)
+            // check if there are any more heroes left to load, if not, end the level (failure/lose)
+
+            game.mode = 'waiting-for-firing';
+        }
+
+        if (game.mode == 'firing') {
+            game.pan_to(game.slingshot_x);
+        }
+
+        if (game.mode == 'fired') {
+            //TODO:
+            // Pan to wherever the hero currently is.
+        }
     },
 
     animate: function() {
@@ -62,7 +135,7 @@ let game = {
 
         // animate characters
 
-        // draw background with parallax scrolling. TODO: JeffNote: The magic.
+        // draw background with parallax scrolling. JEFFNOTE: The magic.
         game.context.drawImage(game.current_level.background_image, game.offset_left/4, 0, 640, 480, 0, 0, 640, 480);
         game.context.drawImage(game.current_level.foreground_image, game.offset_left, 0, 640, 480, 0, 0, 640, 480);
 
@@ -106,7 +179,7 @@ let levels = {
         }
         $('#levelselectscreen').html(html);
 
-        // set the button click handlers
+        // set the button click handlers TODO: this was missing.
         $('#levelselectscreen input').click(function() {
             levels.load(this.value-1);
             $('#levelselectscreen').hide();
@@ -194,5 +267,40 @@ let loader = {
                 loader.onload = undefined;
             }
         }
+    }
+};
+
+let mouse = {
+    x: 0,
+    y: 0,
+    down: false,
+
+    init: function() {
+        $('#gamecanvas').mousemove(mouse.mousemovehandler);
+        $('#gamecanvas').mousedown(mouse.mousedownhandler);
+        $('#gamecanvas').mouseup(mouse.mouseuphandler);
+        $('#gamecanvas').mouseout(mouse.mouseouthandler);
+    },
+
+    mousemovehandler: function(ev) {
+        let offset = $('#gamecanvas').offset(); // JEFFNOTE: equivalent to BBOX
+        mouse.x = ev.pageX - offset.left;
+        mouse.y = ev.pageY - offset.top;
+
+        if (mouse.down) {
+            mouse.dragging = true;  // JEFFNOTE: implicit member variable declaration seems okay.
+        }
+    },
+
+    mousedownhandler: function(ev) {
+        mouse.down = true;
+        mouse.downX = mouse.x;
+        mouse.downY = mouse.y;
+        ev.originalEvent.preventDefault();
+    },
+
+    mouseuphandler: function(ev) {
+        mouse.down = false;
+        mouse.dragging = false;
     }
 };
