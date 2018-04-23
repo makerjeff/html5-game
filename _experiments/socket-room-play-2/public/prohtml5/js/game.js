@@ -29,7 +29,52 @@ let game = {
     show_level_screen: function() {
         $('.gamelayer').hide();
         $('#levelselectscreen').show('slow');
-    }
+    },
+
+    // Game mode
+    mode: 'intro',
+
+    // X Y Coordinates of the slingshot
+    slingshot_x: 140,
+    slingshot_y: 280,
+
+    start: function() {
+        $('.gamelayer').hide();
+
+        // dispay the game canvas and score
+        $('#gamecanvas').show();
+        $('#scorescreen').show();
+
+        game.mode = 'intro';
+        game.offset_left = 0;
+        game.ended = false;
+        game.animation_frame = requestAnimationFrame(game.animate, game.canvas);
+    },
+
+    handle_panning: function() {
+        game.offset_left++;
+    },
+
+    animate: function() {
+
+        // animate the BG
+        game.handle_panning();
+
+        // animate characters
+
+        // draw background with parallax scrolling. TODO: JeffNote: The magic.
+        game.context.drawImage(game.current_level.background_image, game.offset_left/4, 0, 640, 480, 0, 0, 640, 480);
+        game.context.drawImage(game.current_level.foreground_image, game.offset_left, 0, 640, 480, 0, 0, 640, 480);
+
+        // draw slingshot
+        game.context.drawImage(game.slingshot_image, game.slingshot_x - game.offset_left, game.slingshot_y);
+        game.context.drawImage(game.slingshot_front_image, game.slingshot_x - game.offset_left, game.slingshot_y);
+
+        if (!game.ended) {
+            game.animation_frame = requestAnimationFrame(game.animate, game.canvas);
+        }
+
+    },
 };
 
 // --- LEVELS OBJECT ---
@@ -60,6 +105,12 @@ let levels = {
             html += `<input type="button" value="${i+1}" >`;
         }
         $('#levelselectscreen').html(html);
+
+        // set the button click handlers
+        $('#levelselectscreen input').click(function() {
+            levels.load(this.value-1);
+            $('#levelselectscreen').hide();
+        });
     },
 
     // Load all data and images for a specific level
@@ -72,11 +123,11 @@ let levels = {
         let level = levels.data[number];
 
         // load background, foreground, slingshot images.
-        game.current_level.background_image = loader.load_image(`../images/backgrounds/${level.background}.png`);
-        game.current_level.foreground_image = loader.load_image(`../images/backgrounds/${level.foreground}.png`);
+        game.current_level.background_image = loader.load_image(`./images/backgrounds/${level.background}.png`);
+        game.current_level.foreground_image = loader.load_image(`./images/backgrounds/${level.foreground}.png`);
 
-        game.slingshot_image = loader.load_image(`../images/slingshot.png`);
-        game.slingshot_front_image = loader.load_image(`../images/slingshot-front.png`);
+        game.slingshot_image = loader.load_image(`./images/slingshot.png`);
+        game.slingshot_front_image = loader.load_image(`./images/slingshot-front.png`);
 
         // Call game.start() once the assets have loaded.
         if (loader.loaded) {
@@ -84,7 +135,6 @@ let levels = {
         } else {
             loader.onload = game.start;
         }
-
     }
 
 };
