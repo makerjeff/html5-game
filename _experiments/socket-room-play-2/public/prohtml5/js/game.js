@@ -66,7 +66,7 @@ let game = {
     // Pan the screen to the center on 'new_center' jeffnote: magical formula
     pan_to: function(new_center) {
 
-        if (Math.abs(new_center.offset_left - game.canvas.width/4) > 0
+        if (Math.abs(new_center - game.offset_left - game.canvas.width/4) > 0
             && game.offset_left <= game.max_offset
             && game.offset_left >= game.min_offset) {
 
