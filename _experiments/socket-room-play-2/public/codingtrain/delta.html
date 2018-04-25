@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>delta multiplier</title>
+    <style>
+        canvas {
+            /*transform-origin: 0 0;*/
+            /*transform: scale(0.5,0.5);*/
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="main_canvas" width="800" height="600" style="border: 1px solid black;">
+    If you can read this, your browser sucks.
+</canvas>
+
+<script>
+    let canvas = document.getElementById('main_canvas');
+    let context = canvas.getContext('2d');
+
+    let then = Date.now();
+    let now;
+    let interval = 1000/60;
+    let delta;
+
+    let player = {
+        x: 0,
+        y: 0,
+        width: 1,
+        height: canvas.height/10,
+        speed: 0.1, //jeffnote: keep in mind the delta multiplier.
+        health: 100,
+
+        context:context,
+
+
+        draw: function() {
+            // console.log(this);  // 'this' has been confirmed as 'player'
+
+            this.context.save();
+            this.context.fillStyle = 'red';
+            this.context.fillRect(this.x, this.y, this.width, this.height);
+
+            this.context.restore();
+
+        }
+    };
+
+
+
+    // handles everything from input, to update, to draw.
+    function input_update_draw() {
+
+        now = Date.now();
+
+        if (now - then >= interval) {
+            delta = now - then;
+
+            //TODO: this is where
+            // console.log(`Draw-ping: ${Date.now()}, delta: ${delta}`);
+
+            // update position
+            player.x += 0.2 * delta;    // update
+            // player.x += 5;               // fixed update
+
+            if (player.x >= canvas.width) {
+                player.x = 0;
+                player.y += player.height;
+            }
+
+            if (player.y >= canvas.height) {
+                player.y = 0;
+                context.clearRect(0,0,canvas.width,canvas.height);
+
+            }
+
+            // draw
+            player.draw();
+
+
+            then = now;
+        }
+
+        // jeffnote: always at the bottom
+        requestAnimationFrame(input_update_draw);
+    }
+
+    function setup() {
+        input_update_draw();
+
+        player.draw();
+    }
+
+
+
+
+    window.addEventListener('load', function(ev) {
+        setup();
+    });
+
+</script>
+
+</body>
+</html>
