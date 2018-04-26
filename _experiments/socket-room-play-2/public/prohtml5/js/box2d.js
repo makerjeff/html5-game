@@ -22,3 +22,24 @@ function init() {
     let allow_sleep = true;     // Allow objects that are at rest to fall asleep and exclude from calculations.
     world = new b2World(gravity, allow_sleep);
 }
+
+function create_floor() {
+    // a body definition holds all the data needed  to construct a rigid body.
+    let body_def = new b2BodyDef;
+    body_def.type = b2Body.b2_staticBody;
+    body_def.position.x = 640 / 2 / scale;
+    body_def.position.y = 450 / scale;
+
+    // a fixture is used to attach a shape to a body for collision detection.
+    // a fixture definition is used to create a fixture.
+    let fixture_def = new b2FixtureDef;
+    fixture_def.density = 1.0;
+    fixture_def.friction = 0.5;
+    fixture_def.restitution = 0.2;
+
+    fixture_def.shape = new b2PolygonShape;
+    fixture_def.shape.SetAsBox(320 / scale, 10/scale);  // 640 pixels wide and 20 tall
+
+    let body = world.CreateBody(body_def);
+    let fixture = body.CreateFixture(fixture_def);
+}
