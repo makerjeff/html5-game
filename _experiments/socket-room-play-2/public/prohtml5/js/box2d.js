@@ -21,6 +21,9 @@ function init() {
     let gravity = new b2Vec2(0, 9.8);   // gravity, 9.8 m/s^2 downward
     let allow_sleep = true;     // Allow objects that are at rest to fall asleep and exclude from calculations.
     world = new b2World(gravity, allow_sleep);
+
+    // create objects
+    create_floor();
 }
 
 function create_floor() {
@@ -43,3 +46,4 @@ function create_floor() {
     let body = world.CreateBody(body_def);
     let fixture = body.CreateFixture(fixture_def);
 }
+
